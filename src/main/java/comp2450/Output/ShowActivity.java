@@ -2,12 +2,11 @@ package comp2450.Output;
 
 import comp2450.Model.Map.IMapping;
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Activity.Route;
 import comp2450.Model.Map.Obstacle;
 
 /**
  * Shows a visual representation of a single {@link Activity} on the map grid.
- * Prints both the legend and the grid using symbols for empty spaces, {@link Route}, and {@link Obstacle}.
+ * Prints both the legend and the grid using symbols for empty spaces, Route for my {@link Activity}, and {@link Obstacle}.
  */
 public class ShowActivity {
 

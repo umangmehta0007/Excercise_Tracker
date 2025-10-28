@@ -1,10 +1,7 @@
 package comp2450.Model.Map;
 
-import comp2450.Model.Activity.Route;
-
 
 import com.google.common.base.Preconditions;
-import comp2450.Model.Map.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +9,7 @@ import java.util.List;
 /**
  * Represents an Obstacle on a Map.
  * An Obstacle has a name and a list of {@link Coordinates} it occupies.
- * Implements {@link IMapping} and can be had a method {@link #type()} that separates it from {@link Route}.
+ * Implements {@link IMapping}.
  */
 public class Obstacle implements IMapping{
 
@@ -32,7 +29,7 @@ public class Obstacle implements IMapping{
     }
     public Obstacle(String name){
         this.name = name;
-        this.coordinatesCovered = new ArrayList<Coordinates>();
+        this.coordinatesCovered = new ArrayList<>();
         checkObstacle();
     }
 
@@ -44,6 +41,7 @@ public class Obstacle implements IMapping{
      */
     public void addCoordinates(Coordinates coordinates){
 
+        Preconditions.checkNotNull(coordinates, "Coordinates to be added can never be null");
         checkObstacle();
         coordinatesCovered.add(coordinates);
         checkObstacle();
@@ -53,13 +51,8 @@ public class Obstacle implements IMapping{
         return this.name;
     }
 
-    public List<Coordinates> getCoordinates(){
+    public List<Coordinates> getMappingObject(){
 
         return coordinatesCovered;
-    }
-
-    @Override
-    public ObjectType type() {
-        return ObjectType.OBSTACLE;
     }
 }

@@ -1,7 +1,7 @@
 package comp2450.Output;
 
 import comp2450.Model.Map.IMapping;
-import comp2450.Model.Map.ObjectType;
+import comp2450.Model.Activity.Activity;
 
 public class MapLegend {
 
@@ -39,7 +39,7 @@ public class MapLegend {
                 if(myObj == null){ //it firstly check for null to avoid NullPointerException and adds symbol for that
                     System.out.print(EMPTY+" ");
                 }
-                else if(myObj.type()==ObjectType.ROUTE){
+                else if(myObj instanceof Activity){
                     System.out.print(ROUTE+" ");
                 }
                 else{

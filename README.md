@@ -97,8 +97,9 @@ classDiagram
     <li>routeTaken != null</li>
     <li>routeTaken.size() >= 1</li>
     <li>date != null</li>
+    <li>startingCoordinate!=null</li>
     <li>distance > 0</li>
-    <li>currWeight >= 0</li>
+    <li>currWeight > 0</li>
     <li>caloriesBurnt >= 0</li>
     <li>loop: check if coordinates of Route are assigned a null value<li>
     </ul>
@@ -107,32 +108,21 @@ classDiagram
 
         -double CALORIES_CONSTANT <<final>>
         -String name
-        -Gears gearUsed
-        -Route routeTaken
+        -Gears gearsUsed
+        -List~Coordinates~ routeTaken
         -Calendar date
+        -Coordinates startingCoordinate
+        -double distance
+        -double currWeight
         -double caloriesBurnt
 
-
-        +addGear(Gears gear) void
-        +getCaloriesBurnt() double
+        +getGears() ~Gear~
+        +getCalendar() ~Calendar~
         +getDistance() double
         +getName() String
-        +getRoute() Route
-        +getGears() Set~Gear~
         +getcaloriesBurnt() double
-    }
-
-    note for PersonStatistics "Invariant Properties
-    <ul>
-    <li>This is a class with no instance fields.</li>
-    <li>No stored state to gave invariants.</li>
-    </ul>"
-    class PersonStatistics{
-        -activitites(List~Activity~ myActivities,Calendar startDate,Calendar endDate) ArrayList~Activity~
-        
-        +totalCalories(List~Activity~ myActivities,Calendar startDate,Calendar endDate)) double
-        +totalCalories(List~Activity~ myActivities,Calendar startDate,Calendar endDate)) double 
-                        
+        +addCoordiantes()
+        +getMappingObject() List~Coordinates~
     }
 
     note for Map" Invariant Properties
@@ -140,68 +130,49 @@ classDiagram
     <li>name != null</li>
     <li>name.length() >= 1</li>
     <li>obstacles != null</li>
-    <li>routes != null</li>
+    <li>activities != null</li>
     <li>dimensions != null</li>
+    <li>myGird!=null</li>
+    <li>myGrid.length>=1</li> //checking for valid coloumns
+    <li>myGrid[0].length>=1 //checking for valid rows
+    
     <li>loop: no obstacles added here are null</li>
-    <li>loop: no routes added here are null</li>
-    <li>loop: no Coordinate inside obstacles lie outside dimensions</li>
-    <li>loop: no Coordinate inside Route lie outside dimensions</li>
-    
-    
+    <li>loop: no routes added inside each activity here are null</li>
+    <li>loop: no Coordinate inside obstacles lie outside map</li>
+    <li>loop: no Coordinate inside Route inside each activity lie outside map</li>
     </ul>
         "
     class Map{
 
         -String name
         -list~Obstacles~obsctacles
-        -list~Route~routes
+        -list~Activity~activities
         -Dimensions dimensions
         -Imapping[][] myGrid
 
         +addObstacles(Obstacle obs) void
         +removeObstacles(int index) void
-        
-        +addRoutes(Route route) void
-        +removeRoute(Route route)void
-        
-        +createGrid(List~Obstacle~ obstacles, List~Route~route )
-        
-        -addObstacleToGrid(List~Obstacle~ obstacles,List~Route~ routes)
+        +addActivity(Activity activity) void
+        +removeActivity(Activity activity)
+
+        +createGrid(List~Obstacle~ obstacles, list~Activity~route )
+        -addObstacleToGrid(List~Obstacle~ obstacles)
         -addObs(Obstacle obs)
-        
-        -addRouteToGrid(List~Route~ routes)
-        -addRoute(Route route)
-        
-        
-        
+        -addRouteToGrid(list~Activity~activities)
+        -addRoute(Activity act)
+
         +getObsInMap() List~Obstacle~
-        +getRouteInMap() List~Route~
+        +getActivities() List~Activity~
         +getDimensions() Dimension
         +getGrid() IMapping[][]
         +getName() String
 
     }
-
-    note for Route"Invariant Properties
-    <ul>
-    <li>myCurrRoute != null</li>
-    <li>loop: each coordinates to check if they are null</li>
-    </ul>"
-    class Route{
-        -list~Coordiantes~ routeCoordinates
-
-        +getCoordinates() list~Coordinates~
-        +addCoordinates(Coordinates coordinates) void
-        +ObjectType() ObjectType
-
-    }
-
     note for Obstacle" Invariant Properties
     <ul>
     <li>name != null</li>
     <li>name.length() >= 1</li>
     <li>coordinatesCovered != null</li>
-    <li>coordinatesCovered.size >= 1</li>
     <li>loop: no coordinates added are null</li>
     </ul>"
 
@@ -211,7 +182,7 @@ classDiagram
         -List~Coordinates~ coordinatesCovered
 
         +addCoordinates(Coordinates coordinates) void
-        +getCoordinates() List~Coordinates~
+        +getMappingObject() List~Coordinates~
         +getName() String
     }
 
@@ -254,19 +225,17 @@ classDiagram
 
     class IMapping{
             <<Interface>>
-            +ObjectType type() ObjectType
             +addCoordinates(Coordinates coordinates) void
-            +getCoordinates() List~Coordinates~
+            +getMappingObject() List~Coordinates~
     }
-        
-        
-
-        note for Dimensions"Invariant Properties
+ 
+ 
+    note for Dimensions"Invariant Properties
             <ul>
             <li> nRows >=1 </li>
             <li> nCols>=1 </li>
             <ul>
-        "
+     "
             
     class Dimensions{
             <<Record>>
@@ -275,42 +244,20 @@ classDiagram
     }
 
 
-    note for ObjectType "Invariant Properties
-    <ul>
-    <li>Enumerations have no direct invariants as they hold Constant data.</li>
-    </ul>"
-    
-    class ObjectType{
-        <<Enumeration>>
-        ROUTE,
-        OBSTACLE
-    }
 
-
-    Obstacle *-- Coordinates
-    
-    Activity o-- Gears
     Person *-- Gears
-
-    %%Activity*--PersonStatistics
-    
-    Map *-- Obstacle
-    Map o-- Route
-    Map *-- Dimensions
-    Map*--ObjectType
-
-    Activity o-- PersonStatistics
     Person *-- Activity
     Person o-- Map
-
-    Activity *-- Route
-    Activity o-- Map
-
-    Route *-- Coordinates
     
+    Obstacle o-- Coordinates
     
+    Map *-- Obstacle
+    Map o-- Activity
+    Map *-- Dimensions
 
-    Route ..|> IMapping
+    Activity o-- Gears
+
+    Activity ..|> IMapping
     Obstacle ..|> IMapping
 ```
 

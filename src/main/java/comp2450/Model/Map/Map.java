@@ -1,7 +1,6 @@
 package comp2450.Model.Map;
 
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Activity.Route;
 import comp2450.Model.Person.Person;
 
 import com.google.common.base.Preconditions;
@@ -10,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a Map that contains {@link Obstacle}s and {@link Route} for activities done by {@link Person}.
- * The Map stores a grid of {@link IMapping} objects where each cell can be an {@link Obstacle} or {@link Route}.
- * Each {@link Activity} can add its {@link Route} to the grid.
- * {@link Obstacle} are added to the Grid along with {@link Route}
+ * This is a Map that contains {@link Obstacle}s and {@link Activity} done by {@link Person}.
+ * The Map stores a grid of {@link IMapping} objects where each cell can be an {@link Obstacle} or {@link Activity}.
+ * Each {@link Activity} can add its route to the grid.
+ * {@link Obstacle} are added to the Grid along with {@link Activity}
  */
 public class Map {
 
     final private String name;
     final private List<Obstacle> obstacles;
-    final private List<Route> routes;
+    final private List<Activity> activities;
     final private Dimensions dimensions;
     final private IMapping[][]myGrid;
 
@@ -27,7 +26,7 @@ public class Map {
         Preconditions.checkNotNull(name, "Name of the Map> can never be null");
         Preconditions.checkState(name.length()>=1, "A Map should be assigned an empty name");
         Preconditions.checkNotNull(obstacles, "Obstacles cannot be null");
-        Preconditions.checkNotNull(routes, "Routes cannot be null");
+        Preconditions.checkNotNull(activities, "Activities cannot be null");
         Preconditions.checkNotNull(dimensions, "Dimensions should be assigned for a map");
 
         Preconditions.checkNotNull(myGrid, "The grid can never be null");
@@ -37,7 +36,7 @@ public class Map {
         for (Obstacle o : obstacles) {
             Preconditions.checkNotNull(o, "Obstacle in the list should never be null.");
 
-            List<Coordinates> cod = o.getCoordinates();
+            List<Coordinates> cod = o.getMappingObject();
             for(Coordinates coordiante: cod){
                 int x = coordiante.xCoordinates();
                 int y = coordiante.yCoordinates();
@@ -46,12 +45,12 @@ public class Map {
             }
 
         }
-        for (Route r : routes) {
-            Preconditions.checkNotNull(r, "Routes in the list should never be null.");
-            List<Coordinates> cod = r.getCoordinates();
-            for(Coordinates coordiante: cod){
-                int x = coordiante.xCoordinates();
-                int y = coordiante.yCoordinates();
+        for (Activity act : activities) {
+            Preconditions.checkNotNull(act, "Routes in the list should never be null.");
+            List<Coordinates> cod = act.getMappingObject();
+            for(Coordinates coordinate: cod){
+                int x = coordinate.xCoordinates();
+                int y = coordinate.yCoordinates();
                 Preconditions.checkState(x<myGrid.length && y<myGrid[0].length,
                         "Coordinates of Route can never be outside the GRID");
             }
@@ -64,7 +63,7 @@ public class Map {
         this.name = name;
         this.dimensions =dimensions;
         this.obstacles = new ArrayList<>();
-        this.routes = new ArrayList<>();
+        this.activities = new ArrayList<>();
         this.myGrid = new IMapping[dimensions.nRows()][dimensions.nCols()];
         checkMap();
     }
@@ -92,27 +91,26 @@ public class Map {
     }
 
     /**
-     * Adds a new {@link Route} to the Map and updates List {@link #routes}
-     * @param route to be added to the {@link Map}
+     * Adds a new {@link Activity} to the Map
+     * @param activity to be added to the {@link Map}
      */
-    public void addRoutes(Route route){
+    public void addActivity(Activity activity){
         checkMap();
-        routes.add(route);
+        activities.add(activity);
         checkMap();
     }
     /**
-     * Removes this {@link Route} from the map and list of {@link #routes}
-     * @param route is the object To be removed from the list.
+     * Removes this {@link Activity} from the map
+     * @param activity is the object To be removed from the list.
      */
-    public void removeRoute(Route route){
+    public void removeActivity(Activity activity){
 
         checkMap();
-        routes.remove(route);
+        activities.remove(activity);
         checkMap();
     }
 
-
-    public void createGrid(List<Obstacle> obs, List<Route> route){
+    public void createGrid(List<Obstacle> obs, List<Activity> route){
 
         checkMap();
         addObstacleToGrid(obs);
@@ -143,7 +141,7 @@ public class Map {
 
         checkMap();
 
-        ArrayList<Coordinates> myObsC   = new ArrayList<>(obs.getCoordinates());
+        ArrayList<Coordinates> myObsC   = new ArrayList<>(obs.getMappingObject());
 
         for(Coordinates cood: myObsC){
             int x = cood.xCoordinates();
@@ -156,33 +154,26 @@ public class Map {
     }
 
     /**
-     * Adds each {@link Route} from the {@link Activity} to {@link #myGrid} using {@link #addRoute}
-     * @param routes is the list of all Routes to be added to the {@link #myGrid}.
+     * Adds each Route of {@link Activity} from the list {@link #activities} to {@link #myGrid} using {@link #addRoute}
+     * @param activities the activities whose routes are to be added to the {@link #myGrid}.
      */
-    private void addRouteToGrid(List<Route> routes){
+    private void addRouteToGrid(List<Activity> activities){
         checkMap();
 
-        for(Route route: routes){
-            addRoute(route);
+        for(Activity activity: activities){
+
+            addRoute(activity);
         }
         checkMap();
-
-
     }
-    /**
-     * This method is called internally by {@link #addRouteToGrid} which then take individual {@link Activity}
-     * And look for it's {@link Route} and assign {@link Coordinates} of {@link Route} to {@link #myGrid}
-     * @param route is the route chosen from {@link Activity} and added.
-     */
-    private void addRoute(Route route){
-        checkMap();
 
-        ArrayList<Coordinates> myRoute = new ArrayList<>(route.getCoordinates());
-        for(Coordinates cood: myRoute){
+    private void addRoute(Activity act){
+        checkMap();
+        List<Coordinates> route = act.getMappingObject();
+        for(Coordinates cood: route){
             int x = cood.xCoordinates();
             int y = cood.yCoordinates();
-
-            myGrid[x][y] = route;
+            myGrid[x][y] = act;
         }
         checkMap();
 
@@ -195,9 +186,9 @@ public class Map {
 
         return obstacles;
     }
-    public List<Route> getRouteInMap(){
+    public List<Activity> getActivities(){
 
-        return routes;
+        return activities;
     }
     public Dimensions getDimensions(){
 

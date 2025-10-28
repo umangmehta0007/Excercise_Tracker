@@ -25,7 +25,7 @@ public class ShowObstacles {
         int curr = 1;
         for (Obstacle obs : myList) {
 
-            List<Coordinates> coordinatesCovered = obs.getCoordinates();
+            List<Coordinates> coordinatesCovered = obs.getMappingObject();
 
             String summary = curr+". Obstacle" + obs.getName() + "' covers " + coordinatesCovered.size() + " blocks at: ";
 

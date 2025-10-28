@@ -25,7 +25,6 @@ package comp2450;
  */
 
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Activity.Route;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.*;
 import comp2450.Model.Map.Map;
@@ -83,7 +82,7 @@ public class Main {
             String output =
                     """
                    
-                   *To begin with you would just need to create a MAP first(option 2): 
+                   *To begin with you would just need to create a MAP first(option 2):
                    *Then gears are added(option 1), followed by adding obstacles(option 3) if needed then activities(option 4). 
                    
                    Please choose from the following List: 
@@ -156,7 +155,7 @@ public class Main {
                     break;
                 }
                 case(12): {
-                    removeMap();break;
+                    map = null; break;
                 }
                 case(13): {
 
@@ -188,41 +187,57 @@ public class Main {
 
     private static void removeObstacle(Scanner sc, Map map) {
 
-        System.out.println("Please choose the Obstacle you want to remove: ");
 
-        showObstacles(map);
+        if(map.getObsInMap().isEmpty()){
+            System.out.println("Currently NO Obs to remove");
+        }
 
-        int index = sc.nextInt();
+        else {
+            System.out.println("Please choose the Obstacle you want to remove: ");
 
-        map.removeObstacle(index-1);
+            showObstacles(map);
+
+            int index = sc.nextInt();
+
+            map.removeObstacle(index - 1);
+        }
 
     }
     private static void removeActivity(Scanner sc, Person person, Map map) {
 
-        System.out.println("Please choose the Activity you want to remove: ");
 
-        showActivites(person);
+        if(person.getMyActivityList().isEmpty()){
+            System.out.println("Currently NO activities to print");
+        }
 
-        int index = sc.nextInt();
+        else {
+            System.out.println("Please choose the Activity you want to remove: ");
+
+            showActivites(person);
+
+            int index = sc.nextInt();
 
 
-        Activity removedActivity = person.removeActivity(index-1);
-        map.removeRoute(removedActivity.getRoute());
+            Activity removedActivity = person.removeActivity(index - 1);
+            map.removeActivity(removedActivity);
+        }
 
     }
     private static void removeGear(Scanner sc, Person person) {
 
-        System.out.println("Please choose the gear you want to remove: ");
 
-        showGears(sc,person);
+        if(person.getGearsEquipped().isEmpty()){
+            System.out.println("Currently NO activities to print");
+        }
+        else {
+            System.out.println("Please choose the gear you want to remove: ");
 
-        int index = sc.nextInt();
+            showGears(sc, person);
 
-        person.removeGear(index-1);
-    }
-    private static void removeMap() {
+            int index = sc.nextInt();
 
-        Map map = null;
+            person.removeGear(index - 1);
+        }
     }
 
     /**
@@ -235,35 +250,52 @@ public class Main {
      */
     private static void showActivity(Scanner sc, Map map, Person person) {
 
-        System.out.println("Select from the List of the Activity you want to See: ");
-        showActivites(person);
-        int index = sc.nextInt();
 
-        Activity currChosen = person.getMyActivityList().get(index-1);
-        List<Route> route = List.of(currChosen.getRoute());
+        if(person.getMyActivityList().isEmpty()){
+            System.out.println("Currently NO activities to print");
+        }
 
-        Map currMap = new Map(map.getName(),map.getDimensions()); // everytime I call this a new instance is created.
+        else {
+            System.out.println("Select from the List of the Activity you want to See: ");
+            showActivites(person);
+            int index = sc.nextInt();
 
-        //currMap.addObstacleToGrid(map.getObsInMap());
-        //currMap.addRouteToGrid(route);
-        currMap.createGrid(map.getObsInMap(), route);
+            Activity currChosen = person.getMyActivityList().get(index - 1);
+            List<Activity> activity = List.of(currChosen);
 
-        ShowActivity showAct = new ShowActivity(currMap.getGrid());
-        showAct.printActivity();
+            Map currMap = new Map(map.getName(), map.getDimensions()); // everytime I call this a new instance is created.
+
+            //currMap.addObstacleToGrid(map.getObsInMap());
+            //currMap.addRouteToGrid(route);
+            currMap.createGrid(map.getObsInMap(), activity);
+
+            ShowActivity showAct = new ShowActivity(currMap.getGrid());
+            showAct.printActivity();
+        }
 
     }
     private static void showActivites(Person person) {
 
-        PrintAllActivities showAct = new PrintAllActivities(person.getMyActivityList());
+        if(person.getMyActivityList().isEmpty()){
+            System.out.println("Currently NO activities to print");
+        }
+        else {
+            PrintAllActivities showAct = new PrintAllActivities(person.getMyActivityList());
 
-        showAct.printActivities();
-
+            showAct.printActivities();
+        }
     }
     private static void showObstacles(Map map) {
 
-        ShowObstacles showObs = new ShowObstacles(map.getObsInMap());
+        if(map.getObsInMap().isEmpty()){
+            System.out.println("Currently NO Obstacles to print");
+        }
+        else {
 
-        showObs.printObstacle();
+            ShowObstacles showObs = new ShowObstacles(map.getObsInMap());
+
+            showObs.printObstacle();
+        }
 
     }
 
@@ -278,20 +310,19 @@ public class Main {
      */
     private static void showMap(Scanner sc, Map map, Person person) {
 
-        System.out.println("Welcome to the MAP Display! \n" +
-                "Enter the date you want to begin with");
-        Calendar startDate = createCalendar(sc);
-        Calendar endDate = createCalendar(sc);
+            System.out.println("Welcome to the MAP Display! \n" +
+                    "Enter the date you want to begin with");
+            Calendar startDate = createCalendar(sc);
+            Calendar endDate = createCalendar(sc);
 
-        Map currMap = new Map(map.getName(),map.getDimensions()); // everytime I call this a new instance is created.
-        //currMap.addObstacleToGrid(map.getObsInMap());
-        //currMap.addRouteToGrid(map.getRouteInMap());
+            Map currMap = new Map(map.getName(), map.getDimensions()); // everytime I call this a new instance is created.
+            //currMap.addObstacleToGrid(map.getObsInMap());
+            //currMap.addRouteToGrid(map.getRouteInMap());
 
-        currMap.createGrid(map.getObsInMap(), map.getRouteInMap());
+            currMap.createGrid(map.getObsInMap(), map.getActivities());
 
-
-        ShowMap showMap = new ShowMap(currMap.getGrid(),person,startDate,endDate);
-        showMap.printMap();
+            ShowMap showMap = new ShowMap(currMap.getGrid(), person, startDate, endDate);
+            showMap.printMap();
 
     }
     private static void showGears(Scanner sc,Person person){
@@ -322,10 +353,6 @@ public class Main {
 
 
         Obstacle myObstacle = new Obstacle(name);
-
-        boolean done = false;
-
-        Coordinates currentCoordinate;
 
         Coordinates intialCoordinates = addInitialCoordinates(sc);
         myObstacle.addCoordinates(intialCoordinates);
@@ -370,12 +397,12 @@ public class Main {
 
         Gears gear = addGearsToActivity(sc,person);
 
-        System.out.println("Let's select the route visited: ");
-        Route route = createRoute(sc);
+        Coordinates initial = addInitialCoordinates(sc); // creating initial point to start from, minimum one
+        Activity currActivity = new Activity(name, initial, date, distance, currentWeight, gear);
 
-        Activity currActivity = new Activity(name, route, date, distance, currentWeight, gear);
-        map.addRoutes(route);
+        createRoute(sc, currActivity); //creating the route by adding other coordinates needed.
         person.addActivity(currActivity);
+        map.addActivity(currActivity);
     }
 
     /**
@@ -441,25 +468,12 @@ public class Main {
 
         cal.set(year, month, day, hour, minute, second);
 
-
         return cal;
 
     }
-    private static Route createRoute(Scanner sc) {
-
-        Route myActivityRoute = new Route();
-
-        boolean done = false;
-
-        Coordinates currentCoordinate;
-
-        Coordinates intialCoordinates = addInitialCoordinates(sc);
-
-        myActivityRoute.addCoordinates(intialCoordinates);
+    private static void createRoute(Scanner sc, Activity myActivityRoute ) {
 
         updateCoordiantes(sc, myActivityRoute);
-
-        return myActivityRoute;
     }
     private static Coordinates addInitialCoordinates(Scanner sc){
 
@@ -543,14 +557,14 @@ public class Main {
      *
      * @param direction the direction to move ('N' for North, 'S' for South, 'E' for East, 'W' for West)
      * @param steps the number of steps to move in the given direction
-     * @param mappableObject the object implementing {@link IMapping} which will be {@link Obstacle} or {@link Route}
+     * @param mappableObject the object implementing {@link IMapping} which will be {@link Obstacle} or {@link Activity}
      * where the new coordinates will be added
      */
     private static void addCoordinates(char direction, int steps, IMapping mappableObject) {
 
         for (int i = 0; i < steps; i++) {
 
-            List<Coordinates> currList = mappableObject.getCoordinates();
+            List<Coordinates> currList = mappableObject.getMappingObject();
 
             Coordinates lastCod = currList.get(currList.size() - 1);
 
@@ -578,4 +592,4 @@ public class Main {
 
             }
         }
-    }
+}
