@@ -1,6 +1,4 @@
 package comp2450;
-
-
 /*
  * COMP 2450 SECTION: [A01]
  * INSTRUCTOR: [Franklin Bristow]
@@ -218,8 +216,8 @@ public class Main {
             int index = sc.nextInt();
 
 
-            Activity removedActivity = person.removeActivity(index - 1);
-            map.removeActivity(removedActivity);
+            person.removeActivity(index - 1);
+            map.removeActivity(index - 1);
         }
 
     }

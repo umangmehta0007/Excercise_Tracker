@@ -78,7 +78,7 @@ classDiagram
         -list~Gear~gearsEquipped
 
         +addActivity(Activity activity) void
-        +removeActivity(int index) Activity
+        +removeActivity(int index) void
 
         +addGear(Gears gear) void
         +removeGear(Gears gear) void
@@ -153,7 +153,7 @@ classDiagram
         +addObstacles(Obstacle obs) void
         +removeObstacles(int index) void
         +addActivity(Activity activity) void
-        +removeActivity(Activity activity)
+        +removeActivity(int index) void
 
         +createGrid(List~Obstacle~ obstacles, list~Activity~route )
         -addObstacleToGrid(List~Obstacle~ obstacles)
@@ -228,8 +228,12 @@ classDiagram
             +addCoordinates(Coordinates coordinates) void
             +getMappingObject() List~Coordinates~
     }
- 
- 
+
+    class ActivityHandler {
+        <<interface>>
+        +addActivity(Activity activity)
+        +removeActivity(int index)
+    }
     note for Dimensions"Invariant Properties
             <ul>
             <li> nRows >=1 </li>
@@ -242,9 +246,6 @@ classDiagram
             -int nRows
             -int nCols
     }
-
-
-
     Person *-- Gears
     Person *-- Activity
     Person o-- Map
@@ -259,6 +260,8 @@ classDiagram
 
     Activity ..|> IMapping
     Obstacle ..|> IMapping
+    Person ..|> ActivityHandler
+    Map ..|> ActivityHandler
 ```
 
 

@@ -4,6 +4,7 @@ package comp2450.Model.Person;
 import comp2450.Model.Activity.Activity;
 
 import com.google.common.base.Preconditions;
+import comp2450.Model.Activity.ActivityTracker;
 
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
  * A {@link Gears}, {@link Activity} can be added/removed from the person's list.
  * {@link #weight} can be updated anytime during the Program.
  */
-public class Person {
+public class Person implements ActivityTracker {
 
     final private String name;
     private double weight;
@@ -70,11 +71,10 @@ public class Person {
      * Removes this {@link Activity} from the {@link #myActivityList}
      * @param index To be removed from the list.
      */
-    public Activity removeActivity(int index){
+    public void removeActivity(int index){
         checkPerson();
-        Activity removed = myActivityList.remove(index);
+        myActivityList.remove(index);
         checkPerson();
-        return removed;
     }
 
     /**

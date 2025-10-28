@@ -1,6 +1,7 @@
 package comp2450.Model.Map;
 
 import comp2450.Model.Activity.Activity;
+import comp2450.Model.Activity.ActivityTracker;
 import comp2450.Model.Person.Person;
 
 import com.google.common.base.Preconditions;
@@ -14,7 +15,7 @@ import java.util.List;
  * Each {@link Activity} can add its route to the grid.
  * {@link Obstacle} are added to the Grid along with {@link Activity}
  */
-public class Map {
+public class Map implements ActivityTracker {
 
     final private String name;
     final private List<Obstacle> obstacles;
@@ -101,12 +102,12 @@ public class Map {
     }
     /**
      * Removes this {@link Activity} from the map
-     * @param activity is the object To be removed from the list.
+     * @param index is the object To be removed from the list.
      */
-    public void removeActivity(Activity activity){
+    public void removeActivity(int index){
 
         checkMap();
-        activities.remove(activity);
+        activities.remove(index);
         checkMap();
     }
 
