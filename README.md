@@ -14,7 +14,7 @@ Map and GPS to record and track our data. The program begins as just you've fini
 your desk to enter all details about it.
 
 * As you begin, it records your information as in Starva/Apple fitness( Here it asks for name and weight).
-* There is MAP which creates a Grid with Rows and Coloumns defined by the user along with user defined obstacles.   
+* There is MAP which creates a Grid with Rows and Columns defined by the user along with user defined obstacles.   
 * Track workouts including the gears used and the route taken. 
 * The goal is to have your data stored and print them when you need details. (Example: Viewing the data within user specified date range)
 
@@ -139,13 +139,14 @@ classDiagram
     <li>activities != null</li>
     <li>dimensions != null</li>
     <li>myGird!=null</li>
-    <li>myGrid.length>=1</li> //checking for valid coloumns
+    <li>myGrid.length>=1</li> //checking for valid columns
     <li>myGrid[0].length>=1 //checking for valid rows
     
     <li>loop: no obstacles added here are null</li>
     <li>loop: no routes added inside each activity here are null</li>
     <li>loop: no Coordinate inside obstacles lie outside map</li>
     <li>loop: no Coordinate inside Route inside each activity lie outside map</li>
+    <li> loop: each no coordinate of my Grid should be null </li>
     </ul>
         "
     class Map{
@@ -154,7 +155,7 @@ classDiagram
         -list~Obstacles~obsctacles
         -list~Activity~activities
         -Dimensions dimensions
-        -Imapping[][] myGrid
+        -IMapDataType[][] myGrid
 
         +addObstacles(Obstacle obs) void
         +removeObstacles(int index) void
@@ -170,7 +171,7 @@ classDiagram
         +getObsInMap() List~Obstacle~
         +getActivities() List~Activity~
         +getDimensions() Dimension
-        +getGrid() IMapping[][]
+        +getGrid() IMapDataType[][]
         +getName() String
 
     }

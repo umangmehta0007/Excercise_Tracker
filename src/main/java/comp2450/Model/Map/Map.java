@@ -56,6 +56,12 @@ public class Map {
             }
         }
 
+        for(int i = 0; i < myGrid.length; i++) {
+            for (int j = 0; j < myGrid[i].length; j++) {
+                Preconditions.checkNotNull(myGrid[i][j],"Grid cell must never be null.");
+            }
+        }
+
 
     }
 
