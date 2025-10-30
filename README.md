@@ -9,7 +9,7 @@
 # Overview
 
 Exercise Tracker is an implementation of real apps like Starva and Apple Fitness for COMP 2450 in FALL 2025.
-However due to accessibility issues and knowledge limitations, we're using a grid system instead of a real 
+However, due to accessibility issues and knowledge limitations, we're using a grid system instead of a real 
 Map and GPS to record and track our data. The program begins as just you've finished a workout and came on
 your desk to enter all details about it.
 
@@ -191,6 +191,16 @@ classDiagram
         +getMappingObject() List~Coordinates~
         +getName() String
     }
+        
+        
+        note for Empty "Invariant Properties
+        <ul> 
+        <li>Always represents an empty grid cell (no internal state).
+        <ul>"
+        
+        class Empty{
+            
+        }
 
         note for Coordinates"Invariant Properties
         <ul>
