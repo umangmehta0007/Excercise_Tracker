@@ -1,6 +1,7 @@
 package comp2450.Model.Activity;
 
-import comp2450.Model.Map.IMapping;
+import comp2450.Model.Map.IMapDataType;
+import comp2450.Model.Map.IObjectsWithCoordinates;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.Coordinates;
 import com.google.common.base.Preconditions;
@@ -16,7 +17,7 @@ import java.util.*;
  * The class can calculate {@link #caloriesBurnt} based on {@link #CALORIES_CONSTANT},
  * {@link #currWeight}, and {@link #distance}.
  */
-public class Activity implements IMapping {
+public class Activity implements IMapDataType, IObjectsWithCoordinates {
 
     final private double CALORIES_CONSTANT = 1.36;
     final private String name;
@@ -83,9 +84,9 @@ public class Activity implements IMapping {
     }
 
     /**
-    * Calculates and returns the total calories burnt during this activity.
-    * Using {@link #distance} , {@link #CALORIES_CONSTANT } and {@link #currWeight} during activity
-    */
+     * Calculates and returns the total calories burnt during this activity.
+     * Using {@link #distance} , {@link #CALORIES_CONSTANT } and {@link #currWeight} during activity
+     */
     public double getcaloriesBurnt(){
         this.caloriesBurnt = CALORIES_CONSTANT*this.currWeight*distance;
         checkActivity();

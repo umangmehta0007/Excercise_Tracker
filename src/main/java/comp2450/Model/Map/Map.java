@@ -1,7 +1,6 @@
 package comp2450.Model.Map;
 
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Activity.ActivityTracker;
 import comp2450.Model.Person.Person;
 
 import com.google.common.base.Preconditions;
@@ -11,17 +10,17 @@ import java.util.List;
 
 /**
  * This is a Map that contains {@link Obstacle}s and {@link Activity} done by {@link Person}.
- * The Map stores a grid of {@link IMapping} objects where each cell can be an {@link Obstacle} or {@link Activity}.
+ * The Map stores a grid of {@link IMapDataType} objects where each cell can be an {@link Obstacle} or {@link Activity}.
  * Each {@link Activity} can add its route to the grid.
  * {@link Obstacle} are added to the Grid along with {@link Activity}
  */
-public class Map implements ActivityTracker {
+public class Map {
 
     final private String name;
     final private List<Obstacle> obstacles;
     final private List<Activity> activities;
     final private Dimensions dimensions;
-    final private IMapping[][]myGrid;
+    final private IMapDataType[][]myGrid;
 
     private void checkMap(){
         Preconditions.checkNotNull(name, "Name of the Map> can never be null");
@@ -65,7 +64,15 @@ public class Map implements ActivityTracker {
         this.dimensions =dimensions;
         this.obstacles = new ArrayList<>();
         this.activities = new ArrayList<>();
-        this.myGrid = new IMapping[dimensions.nRows()][dimensions.nCols()];
+        this.myGrid = new IMapDataType[dimensions.nRows()][dimensions.nCols()];
+
+        for(int i = 0; i<myGrid.length;i++){
+            for(int j = 0; j<myGrid[i].length;j++){
+
+                myGrid[i][j] = new Empty(new Coordinates(i,j));
+
+            }
+        }
         checkMap();
     }
 
@@ -195,7 +202,7 @@ public class Map implements ActivityTracker {
 
         return dimensions;
     }
-    public IMapping[][] getGrid(){
+    public IMapDataType[][] getGrid(){
         return this.myGrid;
     }
     public String getName(){

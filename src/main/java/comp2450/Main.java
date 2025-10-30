@@ -225,7 +225,7 @@ public class Main {
 
 
         if(person.getGearsEquipped().isEmpty()){
-            System.out.println("Currently NO activities to print");
+            System.out.println("Currently NO Gears to choose from ");
         }
         else {
             System.out.println("Please choose the gear you want to remove: ");
@@ -233,8 +233,10 @@ public class Main {
             showGears(sc, person);
 
             int index = sc.nextInt();
+            ArrayList<Gears> gearList = new ArrayList<>(person.getGearsEquipped()); //this is a helper method to get that particular gear
 
-            person.removeGear(index - 1);
+            Gears chosenGear = gearList.get(index-1);
+            person.removeGear(chosenGear); //since gears are distinguished by name, I can remove them
         }
     }
 
@@ -495,7 +497,7 @@ public class Main {
 
     /**
      * This asks the user to enter directions and steps to update the coordinates
-     * of a given {@link IMapping} object until the user chooses to quit.
+     * of a given {@link IObjectsWithCoordinates} object until the user chooses to quit.
      * Valid directions are:
      * 'N' - move North (up)
      * 'S' - move South (down)
@@ -506,9 +508,9 @@ public class Main {
      * This method calls {@link #addCoordinates)} internally to add each step.
      *
      * @param sc {@link Scanner} read user input
-     * @param mappableObject the {@link IMapping} object whose coordinates are being updated
+     * @param mappableObject the {@link IObjectsWithCoordinates} object whose coordinates are being updated
      */
-    private static void updateCoordiantes(Scanner sc, IMapping mappableObject) {
+    private static void updateCoordiantes(Scanner sc, IObjectsWithCoordinates mappableObject) {
 
         boolean done = false;
 
@@ -550,15 +552,15 @@ public class Main {
     }
 
     /**
-     * Adds new coordinates to the given {@link IMapping}.
+     * Adds new coordinates to the given {@link IObjectsWithCoordinates}.
      * It starts from the last coordinate already present in the object and moves step by step.
      *
      * @param direction the direction to move ('N' for North, 'S' for South, 'E' for East, 'W' for West)
      * @param steps the number of steps to move in the given direction
-     * @param mappableObject the object implementing {@link IMapping} which will be {@link Obstacle} or {@link Activity}
+     * @param mappableObject the object implementing {@link IObjectsWithCoordinates} which will be {@link Obstacle} or {@link Activity}
      * where the new coordinates will be added
      */
-    private static void addCoordinates(char direction, int steps, IMapping mappableObject) {
+    private static void addCoordinates(char direction, int steps, IObjectsWithCoordinates mappableObject) {
 
         for (int i = 0; i < steps; i++) {
 

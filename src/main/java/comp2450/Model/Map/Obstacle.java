@@ -9,9 +9,9 @@ import java.util.List;
 /**
  * Represents an Obstacle on a Map.
  * An Obstacle has a name and a list of {@link Coordinates} it occupies.
- * Implements {@link IMapping}.
+ * Implements {@link IMapDataType}.
  */
-public class Obstacle implements IMapping{
+public class Obstacle implements IMapDataType, IObjectsWithCoordinates{
 
     final private String name;
     final private List<Coordinates> coordinatesCovered;

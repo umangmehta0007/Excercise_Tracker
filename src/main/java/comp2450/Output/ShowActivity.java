@@ -1,6 +1,6 @@
 package comp2450.Output;
 
-import comp2450.Model.Map.IMapping;
+import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Activity.Activity;
 import comp2450.Model.Map.Obstacle;
 
@@ -11,13 +11,13 @@ import comp2450.Model.Map.Obstacle;
 public class ShowActivity {
 
 
-    final private IMapping[][] MY_GRID_ACTIVITY;
+    final private IMapDataType[][] MY_GRID_ACTIVITY;
     final private char OBS = '*';
     final private char ROUTE = '>';
     final private char EMPTY = '.';
 
 
-    public ShowActivity(IMapping[][] MY_GRID_ACTIVITY) {
+    public ShowActivity(IMapDataType[][] MY_GRID_ACTIVITY) {
         this.MY_GRID_ACTIVITY = MY_GRID_ACTIVITY;
     }
 

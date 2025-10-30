@@ -1,6 +1,7 @@
 package comp2450.Output;
 
-import comp2450.Model.Map.IMapping;
+import comp2450.Model.Map.Empty;
+import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Activity.Activity;
 
 public class MapLegend {
@@ -21,29 +22,26 @@ public class MapLegend {
 
 
     /**
-     * Prints the 2D map grid and assign the character instead of Object from {@link IMapping}
-     *
-     * @param grid  the grid containing {@link IMapping} objects
+     * Prints the 2D map grid and assign the character instead of Object from {@link IMapDataType}
+     * @param grid  the grid containing {@link IMapDataType} objects
      * @param EMPTY symbol for empty location
      * @param ROUTE symbol for route
      * @param OBS   symbol for obstacle
      */
-    public static void printGrid(IMapping[][] grid, char EMPTY, char ROUTE, char OBS){
+    public static void printGrid(IMapDataType[][] grid, char EMPTY, char ROUTE, char OBS){
 
-        for(int i = 0;i<grid.length; i++){
+        for (IMapDataType[] iMapDataTypes : grid) {
 
-            for(int j = 0;j<grid[i].length;j++){
+            for (int j = 0; j < iMapDataTypes.length; j++) {
 
-                IMapping myObj = grid[i][j];
+                IMapDataType myObj = iMapDataTypes[j];
 
-                if(myObj == null){ //it firstly check for null to avoid NullPointerException and adds symbol for that
-                    System.out.print(EMPTY+" ");
-                }
-                else if(myObj instanceof Activity){
-                    System.out.print(ROUTE+" ");
-                }
-                else{
-                    System.out.print(OBS+" ");
+                if (myObj instanceof Empty) { //it firstly checks for null to avoid NullPointerException and adds symbol for that
+                    System.out.print(EMPTY + " ");
+                } else if (myObj instanceof Activity) {
+                    System.out.print(ROUTE + " ");
+                } else {
+                    System.out.print(OBS + " ");
                 }
             }
             System.out.println();

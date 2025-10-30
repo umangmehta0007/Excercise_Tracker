@@ -4,7 +4,7 @@
 
 ### Author: Umang Mehta (7885176)
 
-#### Date: October 8, 2025
+#### Date: October 30, 2025
 
 # Overview
 
@@ -17,6 +17,12 @@ your desk to enter all details about it.
 * There is MAP which creates a Grid with Rows and Coloumns defined by the user along with user defined obstacles.   
 * Track workouts including the gears used and the route taken. 
 * The goal is to have your data stored and print them when you need details. (Example: Viewing the data within user specified date range)
+
+**I separated IMapDataType (which marks objects that can be placed on the grid)
+from IObjectsWithCoordinates (which adds coordinate behavior).**
+
+This avoids forcing Empty to implement meaningless methods, while still allowing
+consistent polymorphism in the map grid.
 
 [Starva]: https://en.wikipedia.org/wiki/Strava
 [Apple Fitness]: https://en.wikipedia.org/wiki/Fitness_(Apple)
@@ -218,21 +224,30 @@ classDiagram
         +compareTo(Gear gear) int
     }
 
-    note for IMapping "Invariant Properties
+    note for IObjectsWithCoordinates "Invariant Properties
     <ul>
     <li>Interfaces have no direct invariants as they hold no data.</li>
     </ul>"
 
-    class IMapping{
+    class IObjectsWithCoordinates{
             <<Interface>>
-            +addCoordinates(Coordinates coordinates) void
             +getMappingObject() List~Coordinates~
+            +addCoordinates(Coordinates coordinates) void
     }
 
     class ActivityHandler {
         <<interface>>
         +addActivity(Activity activity)
         +removeActivity(int index)
+    }
+
+    note for IMapDataType "Invariant Properties
+    <ul>
+    <li>Interfaces have no direct invariants as they hold no data.</li>
+    </ul>"
+    
+    class IMapDataType{
+        <<Interface>>
     }
     note for Dimensions"Invariant Properties
             <ul>
@@ -255,13 +270,16 @@ classDiagram
     Map *-- Obstacle
     Map o-- Activity
     Map *-- Dimensions
+    Map *--Empty
 
     Activity o-- Gears
 
-    Activity ..|> IMapping
-    Obstacle ..|> IMapping
-    Person ..|> ActivityHandler
-    Map ..|> ActivityHandler
+    Activity ..|> IObjectsWithCoordinates
+    Obstacle ..|> IObjectsWithCoordinates
+    
+    Activity ..|> IMapDataType
+    Obstacle ..|> IMapDataType
+    Empty ..|> IMapDataType
 ```
 
 
