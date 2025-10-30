@@ -245,12 +245,6 @@ classDiagram
             +addCoordinates(Coordinates coordinates) void
     }
 
-    class ActivityHandler {
-        <<interface>>
-        +addActivity(Activity activity)
-        +removeActivity(int index)
-    }
-
     note for IMapDataType "Invariant Properties
     <ul>
     <li>Interfaces have no direct invariants as they hold no data.</li>
