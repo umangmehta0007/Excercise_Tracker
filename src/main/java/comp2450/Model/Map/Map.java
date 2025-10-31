@@ -75,7 +75,7 @@ public class Map {
         for(int i = 0; i<myGrid.length;i++){
             for(int j = 0; j<myGrid[i].length;j++){
 
-                myGrid[i][j] = new Empty(); //replacing null with Empty Objects created.
+                myGrid[i][j] = new Empty(new Coordinates(i,j)); //replacing null with Empty Objects created.
 
             }
         }

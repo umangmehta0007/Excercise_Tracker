@@ -1,7 +1,6 @@
 package comp2450.Model.Activity;
 
 import comp2450.Model.Map.IMapDataType;
-import comp2450.Model.Map.IObjectsWithCoordinates;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.Coordinates;
 import com.google.common.base.Preconditions;
@@ -17,7 +16,7 @@ import java.util.*;
  * The class can calculate {@link #caloriesBurnt} based on {@link #CALORIES_CONSTANT},
  * {@link #currWeight}, and {@link #distance}.
  */
-public class Activity implements IMapDataType, IObjectsWithCoordinates {
+public class Activity implements IMapDataType {
 
     final private double CALORIES_CONSTANT = 1.36;
     final private String name;
@@ -103,7 +102,7 @@ public class Activity implements IMapDataType, IObjectsWithCoordinates {
 
     @Override
     public List<Coordinates> getMappingObject() {
-        return routeTaken;
+        return Collections.unmodifiableList(routeTaken);
     }
 
 }

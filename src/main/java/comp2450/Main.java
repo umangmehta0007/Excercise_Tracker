@@ -497,7 +497,7 @@ public class Main {
 
     /**
      * This asks the user to enter directions and steps to update the coordinates
-     * of a given {@link IObjectsWithCoordinates} object until the user chooses to quit.
+     * of a given {@link IMapDataType} object until the user chooses to quit.
      * Valid directions are:
      * 'N' - move North (up)
      * 'S' - move South (down)
@@ -508,9 +508,9 @@ public class Main {
      * This method calls {@link #addCoordinates)} internally to add each step.
      *
      * @param sc {@link Scanner} read user input
-     * @param mappableObject the {@link IObjectsWithCoordinates} object whose coordinates are being updated
+     * @param mappableObject the {@link IMapDataType} object whose coordinates are being updated
      */
-    private static void updateCoordiantes(Scanner sc, IObjectsWithCoordinates mappableObject) {
+    private static void updateCoordiantes(Scanner sc, IMapDataType mappableObject) {
 
         boolean done = false;
 
@@ -552,44 +552,55 @@ public class Main {
     }
 
     /**
-     * Adds new coordinates to the given {@link IObjectsWithCoordinates}.
+     * Adds new coordinates to the given {@link IMapDataType}.
      * It starts from the last coordinate already present in the object and moves step by step.
      *
      * @param direction the direction to move ('N' for North, 'S' for South, 'E' for East, 'W' for West)
      * @param steps the number of steps to move in the given direction
-     * @param mappableObject the object implementing {@link IObjectsWithCoordinates} which will be {@link Obstacle} or {@link Activity}
+     * @param mappableObject the object implementing {@link IMapDataType} which will be {@link Obstacle} or {@link Activity}
      * where the new coordinates will be added
      */
-    private static void addCoordinates(char direction, int steps, IObjectsWithCoordinates mappableObject) {
+    private static void addCoordinates(char direction, int steps, IMapDataType mappableObject) {
 
         for (int i = 0; i < steps; i++) {
 
             List<Coordinates> currList = mappableObject.getMappingObject();
 
-            Coordinates lastCod = currList.get(currList.size() - 1);
-
-            int xCod = lastCod.xCoordinates();
-            int yCod = lastCod.yCoordinates();
-
-            switch (direction) {
-
-                case 'N':
-                    xCod = lastCod.xCoordinates() - 1;
-                    break;
-                case 'S':
-                    xCod = lastCod.xCoordinates() + 1;
-                    break;
-                case 'E':
-                    yCod = lastCod.yCoordinates() + 1;
-                    break;
-                case 'W':
-                    yCod = lastCod.yCoordinates() - 1;
-                    break;
+            Coordinates newCod = getNewCod(direction, currList);
+            if(mappableObject instanceof Obstacle obs){
+                obs.addCoordinates(newCod);
+            }else if(mappableObject instanceof Activity act){
+                act.addCoordinates(newCod);
+            }else{
+                System.out.println("Nothing can be added at empty place");
             }
-
-            Coordinates newCod = new Coordinates(xCod, yCod);
-            mappableObject.addCoordinates(newCod);
 
             }
         }
+
+    private static Coordinates getNewCod(char direction, List<Coordinates> currList) {
+        Coordinates lastCod = currList.getLast();
+
+        int xCod = lastCod.xCoordinates();
+        int yCod = lastCod.yCoordinates();
+
+        switch (direction) {
+
+            case 'N':
+                xCod = lastCod.xCoordinates() - 1;
+                break;
+            case 'S':
+                xCod = lastCod.xCoordinates() + 1;
+                break;
+            case 'E':
+                yCod = lastCod.yCoordinates() + 1;
+                break;
+            case 'W':
+                yCod = lastCod.yCoordinates() - 1;
+                break;
+        }
+
+        Coordinates newCod = new Coordinates(xCod, yCod);
+        return newCod;
+    }
 }

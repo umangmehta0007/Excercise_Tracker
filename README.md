@@ -18,11 +18,18 @@ your desk to enter all details about it.
 * Track workouts including the gears used and the route taken. 
 * The goal is to have your data stored and print them when you need details. (Example: Viewing the data within user specified date range)
 
-**I separated IMapDataType (which marks objects that can be placed on the grid)
-from IObjectsWithCoordinates (which adds coordinate behavior).**
+## Phase 1 Feedback Improvements
 
-This avoids forcing Empty to implement meaningless methods, while still allowing
-consistent polymorphism in the map grid.
+- Removed Route class and now represent routes directly using Coordinates and  RouteTaken in `Activity` class was be marked a list.
+- Added different list of Activities inside Map, which is used to ensure route coordinates remain valid
+- Removed `isRoute()` from the Obstacle, as suggested by feedback.
+- Introduced `instanceof` only where necessary for grid printing.
+- Combined PersonStatistic functionality into Person to simplify the model.
+- added a loop to check for null values in  coordinates of a Route `routeTaken`
+- Added class invariants in Map to ensure coordinates of obstacles and route stay within grid bounds.
+- Added validation inside private Map methods to maintain grid consistency.
+- Introduced `Empty` class to avoid null grid cells and better represent empty spaces.
+- Initialized all grid cells as `Empty` objects inside Map constructor.
 
 [Starva]: https://en.wikipedia.org/wiki/Strava
 [Apple Fitness]: https://en.wikipedia.org/wiki/Fitness_(Apple)
@@ -195,11 +202,14 @@ classDiagram
         
         
         note for Empty "Invariant Properties
-        <ul> 
-        <li>Always represents an empty grid cell (no internal state).
+        <ul>
+        <li>myEmptyCoordinates!= null </li>
+        <li>myEmptyCoordinates.size() == 1 </li>
         <ul>"
         
         class Empty{
+                -List~Coordinates~myEmptyCoordinates
+                +getMappingObject() List~Coordinates~
             
         }
 
@@ -235,17 +245,6 @@ classDiagram
         +compareTo(Gear gear) int
     }
 
-    note for IObjectsWithCoordinates "Invariant Properties
-    <ul>
-    <li>Interfaces have no direct invariants as they hold no data.</li>
-    </ul>"
-
-    class IObjectsWithCoordinates{
-            <<Interface>>
-            +getMappingObject() List~Coordinates~
-            +addCoordinates(Coordinates coordinates) void
-    }
-
     note for IMapDataType "Invariant Properties
     <ul>
     <li>Interfaces have no direct invariants as they hold no data.</li>
@@ -253,6 +252,7 @@ classDiagram
     
     class IMapDataType{
         <<Interface>>
+        +getMappingObject() List~Coordinates~
     }
     note for Dimensions"Invariant Properties
             <ul>
@@ -278,9 +278,6 @@ classDiagram
     Map *--Empty
 
     Activity o-- Gears
-
-    Activity ..|> IObjectsWithCoordinates
-    Obstacle ..|> IObjectsWithCoordinates
     
     Activity ..|> IMapDataType
     Obstacle ..|> IMapDataType

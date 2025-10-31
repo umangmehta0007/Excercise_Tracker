@@ -4,6 +4,7 @@ package comp2450.Model.Map;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * An Obstacle has a name and a list of {@link Coordinates} it occupies.
  * Implements {@link IMapDataType}.
  */
-public class Obstacle implements IMapDataType, IObjectsWithCoordinates{
+public class Obstacle implements IMapDataType{
 
     final private String name;
     final private List<Coordinates> coordinatesCovered;
@@ -53,6 +54,6 @@ public class Obstacle implements IMapDataType, IObjectsWithCoordinates{
 
     public List<Coordinates> getMappingObject(){
 
-        return coordinatesCovered;
+        return Collections.unmodifiableList(coordinatesCovered);
     }
 }
