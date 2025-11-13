@@ -2,6 +2,7 @@ package comp2450.Model.Person;
 
 import comp2450.Model.Activity.Activity;
 import com.google.common.base.Preconditions;
+import comp2450.Model.Exceptions.InvalidNameException;
 
 /**
  * Represent Gears equipped by the {@link Person} and also used in {@link Activity}.
@@ -21,13 +22,51 @@ public class Gears implements Comparable<Gears> {
         Preconditions.checkState(uses.length() >= 1, "Gear have atleast a non empty");
     }
 
-    public Gears(String name, String uses){
+
+
+    private Gears(String name, String uses){
         this.name = name;
         this.uses = uses;
 
        // allGears.add(this);
 
         checkGears();
+    }
+
+
+    public static class GearsBuilder{
+        private String name;
+        private String uses;
+
+        public GearsBuilder() {}
+
+        public GearsBuilder nameBuilder(String name) throws InvalidNameException {
+
+            Preconditions.checkNotNull(name, "Name should never be null");
+
+            if(name.isBlank()){
+                throw new InvalidNameException();
+            }
+            this.name = name;
+
+            return this;
+        }
+        public GearsBuilder usageBuilder(String uses) throws InvalidNameException {
+
+            Preconditions.checkNotNull(uses, "Usage should never be null");
+
+            if(uses.isBlank()){
+                throw new InvalidNameException();
+            }
+            this.uses = uses;
+
+            return this;
+        }
+
+        public Gears build(){
+
+            return new Gears(name, uses);
+        }
     }
 
     public String getName(){

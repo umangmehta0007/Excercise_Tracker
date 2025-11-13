@@ -66,6 +66,22 @@ public class Activity implements IMapDataType {
         checkActivity();
     }
 
+
+    /*
+    To be worked on but first let's have gear and coordiantes builder
+     */
+//    public static class ActivityBuilder{
+//        final private String name;
+//        final private Gears gearsUsed;
+//        final private List<Coordinates> routeTaken;
+//        final private Calendar date;
+//        final private Coordinates startingCoordinate;
+//        final private double distance;
+//        final private double currWeight;
+//        private double caloriesBurnt;
+//
+//    }
+
     public Gears getGears(){
         return gearsUsed;
     }

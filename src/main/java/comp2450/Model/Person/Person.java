@@ -4,6 +4,8 @@ package comp2450.Model.Person;
 import comp2450.Model.Activity.Activity;
 
 import com.google.common.base.Preconditions;
+import comp2450.Model.Exceptions.InvalidWeightException;
+import comp2450.Model.Exceptions.InvalidNameException;
 
 import java.util.*;
 
@@ -20,6 +22,7 @@ public class Person {
     private double weight;
     final private List<Activity> myActivityList;
     final private TreeSet<Gears> gearsEquipped;// Uses TreeSet to ensure unique and sorted gears
+    final private TreeSet<Person> following;
 
 
     private void checkPerson(){
@@ -44,15 +47,48 @@ public class Person {
      * @param name   the person's name
      * @param weight the person's weight, must be greater than 0
      */
-    public Person(String name, double weight){
+    private Person(String name, double weight){
 
         this.weight = weight;
         this.name = name;
+        this.following = new TreeSet<>();
         this.myActivityList = new ArrayList<>();
         this.gearsEquipped = new TreeSet<>();
 
 
         checkPerson(); //Post condition to check if a valid person has been made;
+    }
+
+
+    public static class PersonBuilder {
+        private String name;
+        private double weight;
+
+        public PersonBuilder() {}
+
+        public PersonBuilder name(String name) throws InvalidNameException {
+            Preconditions.checkNotNull(name, "Name cannot be null");
+            if (name.isBlank()) {
+                throw new InvalidNameException();
+            }
+            this.name = name;
+            return this;
+        }
+
+        public PersonBuilder weight(double weight) throws InvalidWeightException {
+
+            if (weight <= 0) {
+                throw new InvalidWeightException();
+            }
+            this.weight = weight;
+            return this;
+        }
+
+        public Person build() {
+            Preconditions.checkState(name != null && !name.isBlank(), "Name can never be null/empty");
+            Preconditions.checkState(weight > 0, "Weight must be greater than 0");
+            return new Person(name, weight);
+        }
     }
 
     /**
@@ -100,18 +136,12 @@ public class Person {
 
     }
 
-    /**
-     * Update the {@link #weight} to the new weight of the person
-     * @param weight is the next weight.
-     */
-    public void setWeight(double weight) {
-        checkPerson();
-
-        this.weight = weight;
-        checkPerson();
-
+    public void addFollower(Person person){
+        following.add(person);
     }
-
+    public void removeFollower(int index){
+        following.remove(index);
+    }
 
     private ArrayList<Activity> activities(final Calendar startDate, final Calendar endDate){
 
