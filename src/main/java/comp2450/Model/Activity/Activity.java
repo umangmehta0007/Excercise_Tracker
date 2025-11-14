@@ -1,11 +1,14 @@
 package comp2450.Model.Activity;
 
+import comp2450.Model.Exceptions.InvalidDistanceException;
+import comp2450.Model.Exceptions.InvalidNameException;
 import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.Coordinates;
 import com.google.common.base.Preconditions;
 import comp2450.Model.Person.Person;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -21,7 +24,7 @@ public class Activity implements IMapDataType {
     final private String name;
     final private Gears gearsUsed;
     final private List<Coordinates> routeTaken;
-    final private Calendar date;
+    final private LocalDateTime date;
     final private double distance;
     //Array List can never be nul, all elements should never be null when we loop through them.
 
@@ -42,7 +45,7 @@ public class Activity implements IMapDataType {
 
     }
 
-    public Activity(String name, List<Coordinates> routeTaken,  Calendar date, double distance,Gears gear){
+    private Activity(String name, List<Coordinates> routeTaken,  LocalDateTime date, double distance,Gears gear){
 
         this.name = name;
         this.gearsUsed= gear;
@@ -52,26 +55,64 @@ public class Activity implements IMapDataType {
         // one postcondition: trainer is now a valid trainer.
         checkActivity();
     }
-
-
     /*
-    To be worked on but first let's have gear and coordiantes builder
+    To be worked on but first let's have gear and coordinates builder
      */
-//    public static class ActivityBuilder{
-//        final private String name;
-//        final private Gears gearsUsed;
-//        final private List<Coordinates> routeTaken;
-//        final private Calendar date;
-//        final private double distance;
-//        final private double currWeight;
-//        private double caloriesBurnt;
-//
-//    }
+    public static class ActivityBuilder{
+        private String name;
+        private Gears gearsUsed;
+        private List<Coordinates> routeTaken;
+        private LocalDateTime date;
+        private double distance;
+
+
+        public ActivityBuilder(){}
+
+        public ActivityBuilder name(String getName) throws InvalidNameException {
+
+            Preconditions.checkNotNull(getName, "Name cannot be null");
+            this.name = getName;
+
+            return this;
+        }
+
+        public ActivityBuilder gears(Gears gears){
+
+            Preconditions.checkNotNull(gears, "Gear to be added cannot be null");
+
+            this.gearsUsed = gears;
+            return this;
+        }
+        public ActivityBuilder calendar(LocalDateTime ldt){
+            Preconditions.checkNotNull(ldt, "Time-Date to be added cannot be null");
+
+            this.date = ldt;
+
+            return this;
+        }
+        public ActivityBuilder route(List<Coordinates> route){
+            Preconditions.checkNotNull(route, "route to be added cannot be null");
+            this.routeTaken = route;
+            return this;
+
+        }
+        public ActivityBuilder distance(double distance) throws InvalidDistanceException{
+
+            if(distance<=0){
+                throw new InvalidDistanceException();
+            }
+            return this;
+        }
+
+        public Activity build(){
+            return new Activity(name,routeTaken, date, distance,gearsUsed );
+        }
+    }
 
     public Gears getGears(){
         return gearsUsed;
     }
-    public Calendar getCalendar(){
+    public LocalDateTime getCalendar(){
         return date;
     }
 

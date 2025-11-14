@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import comp2450.Model.Exceptions.InvalidWeightException;
 import comp2450.Model.Exceptions.InvalidNameException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -143,15 +144,15 @@ public class Person {
         following.remove(index);
     }
 
-    private ArrayList<Activity> activities(final Calendar startDate, final Calendar endDate){
+    private ArrayList<Activity> activities(final LocalDateTime startDate, final LocalDateTime endDate){
 
         ArrayList<Activity> activitiesInRange = new ArrayList<>();
 
         for(Activity activity: myActivityList){
 
-            Calendar activityDate = activity.getCalendar();
+            LocalDateTime activityDate = activity.getCalendar();
 
-            if(activityDate.after(startDate) && activityDate.before(endDate)){
+            if(activityDate.isAfter(startDate) && activityDate.isBefore(endDate)){
                 activitiesInRange.add(activity);
             }
 
@@ -159,18 +160,18 @@ public class Person {
         return activitiesInRange;
     }
 
-    public double totalCalories( final Calendar startDate, final Calendar endDate) {
+    public double totalCalories( final LocalDateTime startDate, final LocalDateTime endDate) {
 
         ArrayList<Activity> myActivities = activities(startDate, endDate);
 
         double totalCalories = 0;
         for(Activity act: myActivities){
-            totalCalories+=act.getcaloriesBurnt();
+            totalCalories+=act.caloriesBurnt(this);
         }
 
         return totalCalories;
     }
-    public double totalDistance(final Calendar startDate, final Calendar endDate){
+    public double totalDistance(final LocalDateTime startDate, final LocalDateTime endDate){
 
         ArrayList<Activity> myActivities = activities(startDate, endDate);
 

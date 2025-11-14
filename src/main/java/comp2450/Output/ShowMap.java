@@ -3,6 +3,8 @@ package comp2450.Output;
 import comp2450.Model.Activity.Activity;
 import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Person.*;
+
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 /**
@@ -15,8 +17,8 @@ public class ShowMap {
     final private char EMPTY = '.';
 
     final private IMapDataType[][]MY_GRID_ACTIVITIES;
-    final private Calendar startingDate;
-    final private Calendar endingDate;
+    final private LocalDateTime startingDate;
+    final private LocalDateTime endingDate;
     final private Person person;
 
 
@@ -28,7 +30,7 @@ public class ShowMap {
      * @param startingDate the start date for statistics
      * @param endingDate the end date for statistics
      */
-    public ShowMap(IMapDataType[][] MY_GRID_ACTIVITIES, Person person, Calendar startingDate, Calendar endingDate) {
+    public ShowMap(IMapDataType[][] MY_GRID_ACTIVITIES, Person person, LocalDateTime startingDate, LocalDateTime endingDate) {
         this.MY_GRID_ACTIVITIES = MY_GRID_ACTIVITIES;
         this.startingDate = startingDate;
         this.endingDate = endingDate;

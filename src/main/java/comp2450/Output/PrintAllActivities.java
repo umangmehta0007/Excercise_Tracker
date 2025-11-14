@@ -1,6 +1,7 @@
 package comp2450.Output;
 
 import comp2450.Model.Activity.Activity;
+import comp2450.Model.Person.Person;
 
 import java.util.List;
 /**
@@ -9,10 +10,12 @@ import java.util.List;
 public class PrintAllActivities {
 
     final private List<Activity> activities;
+    final private Person person;
 
 
-    public PrintAllActivities(List<Activity> activities) {
-        this.activities = activities;
+    public PrintAllActivities(Person person) {
+        this.activities = person.getMyActivityList();
+        this.person = person;
     }
 
     public void printActivities(){
@@ -21,8 +24,7 @@ public class PrintAllActivities {
         for(Activity activity: activities){ //for each loops calls in every single activity
 
             System.out.print(count+". ");
-            new PrintActivity(activity).printSummary(); //calls in print of each indivisual activity
-
+            new PrintActivity(activity,person).printSummary(); //calls in print of each individual activity
 
             System.out.println();
 
