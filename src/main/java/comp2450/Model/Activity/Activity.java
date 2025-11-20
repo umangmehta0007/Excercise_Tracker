@@ -2,6 +2,7 @@ package comp2450.Model.Activity;
 
 import comp2450.Model.Exceptions.InvalidDistanceException;
 import comp2450.Model.Exceptions.InvalidNameException;
+import comp2450.Model.Exceptions.InvalidRouteException;
 import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.Coordinates;
@@ -71,6 +72,10 @@ public class Activity implements IMapDataType {
         public ActivityBuilder name(String getName) throws InvalidNameException {
 
             Preconditions.checkNotNull(getName, "Name cannot be null");
+
+            if(name.isBlank()){
+                throw new InvalidNameException();
+            }
             this.name = getName;
 
             return this;
@@ -90,8 +95,12 @@ public class Activity implements IMapDataType {
 
             return this;
         }
-        public ActivityBuilder route(List<Coordinates> route){
+        public ActivityBuilder route(List<Coordinates> route) throws InvalidRouteException {
             Preconditions.checkNotNull(route, "route to be added cannot be null");
+
+            if(route.size() <1 ){
+                throw new InvalidRouteException();
+            }
             this.routeTaken = route;
             return this;
 

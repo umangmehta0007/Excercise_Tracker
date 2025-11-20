@@ -1,6 +1,8 @@
 package comp2450.Model.Map;
 
 import comp2450.Model.Activity.Activity;
+import comp2450.Model.Exceptions.InvalidCoordinatesException;
+import comp2450.Model.Exceptions.InvalidNameException;
 import comp2450.Model.Person.Person;
 
 import com.google.common.base.Preconditions;
@@ -62,26 +64,73 @@ public class Map {
             }
         }
 
-
     }
 
-    public Map(String name, Dimensions dimensions){
+    private Map(String name, Dimensions dimensions,IMapDataType[][]myGrid) {
         this.name = name;
         this.dimensions =dimensions;
         this.obstacles = new ArrayList<>();
         this.activities = new ArrayList<>();
-        this.myGrid = new IMapDataType[dimensions.nRows()][dimensions.nCols()];
-
-        for(int i = 0; i<myGrid.length;i++){
-            for(int j = 0; j<myGrid[i].length;j++){
-
-                myGrid[i][j] = new Empty(new Coordinates(i,j)); //replacing null with Empty Objects created.
-
-            }
-        }
+        this.myGrid = myGrid;
         checkMap();
     }
 
+    public static class MapBuilder {
+
+        private String name;
+        private Dimensions dimensions;
+        private IMapDataType[][]myGrid;
+
+
+        public MapBuilder() {}
+
+        public void CreateMap(){
+
+        }
+
+        public MapBuilder name(String name) throws InvalidNameException{
+
+            Preconditions.checkNotNull(name, "Name can never be initialized as null");
+
+            if(name.isBlank()){
+                throw new InvalidNameException();
+            }
+            this.name = name;
+            return this;
+        }
+
+        public MapBuilder dimensions(Dimensions dim){
+
+            Preconditions.checkNotNull(dim, "Dimensions can never be null");
+
+            this.dimensions = dim;
+            return this;
+
+        }
+
+        private void makeGrid() throws InvalidCoordinatesException {
+            myGrid = new IMapDataType[dimensions.nRows()][dimensions.nCols()];
+
+            for (int i = 0; i < dimensions.nRows(); i++) {
+                for (int j = 0; j < dimensions.nCols(); j++) {
+                    Coordinates cod = new Coordinates.CoordinateBuilder()
+                            .xCoordinates(i)
+                            .yCoordinates(j)
+                            .build();
+
+                    myGrid[i][j] = new Empty(cod);
+                }
+            }
+        }
+
+        public Map build() throws InvalidCoordinatesException {
+
+            makeGrid();
+            return new Map(name, dimensions, myGrid);
+        }
+
+
+    }
 
     /**
      * Adds a new {@link Obstacle} to the Map and updates List {@link #obstacles}
