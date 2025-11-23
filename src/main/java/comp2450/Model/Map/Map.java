@@ -84,11 +84,8 @@ public class Map {
 
         public MapBuilder() {}
 
-        public void CreateMap(){
 
-        }
-
-        public MapBuilder name(String name) throws InvalidNameException{
+        public MapBuilder createName(String name) throws InvalidNameException{
 
             Preconditions.checkNotNull(name, "Name can never be initialized as null");
 

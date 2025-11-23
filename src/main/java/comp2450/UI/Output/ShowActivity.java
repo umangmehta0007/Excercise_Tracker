@@ -1,4 +1,4 @@
-package comp2450.Output;
+package comp2450.UI.Output;
 
 import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Activity.Activity;

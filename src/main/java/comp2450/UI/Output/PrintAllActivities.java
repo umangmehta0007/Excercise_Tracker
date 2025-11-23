@@ -1,5 +1,6 @@
-package comp2450.Output;
+package comp2450.UI.Output;
 
+import comp2450.Logic.RouteLogic;
 import comp2450.Model.Activity.Activity;
 import comp2450.Model.Person.Person;
 
@@ -9,13 +10,11 @@ import java.util.List;
  */
 public class PrintAllActivities {
 
-    final private List<Activity> activities;
-    final private Person person;
+   final private List<Activity>activities;
 
 
-    public PrintAllActivities(Person person) {
-        this.activities = person.getMyActivityList();
-        this.person = person;
+    public PrintAllActivities(List<Activity> act) {
+        this.activities = act;
     }
 
     public void printActivities(){
@@ -24,7 +23,7 @@ public class PrintAllActivities {
         for(Activity activity: activities){ //for each loops calls in every single activity
 
             System.out.print(count+". ");
-            new PrintActivity(activity,person).printSummary(); //calls in print of each individual activity
+            new PrintActivity(activity).printSummary(); //calls in print of each individual activity
 
             System.out.println();
 

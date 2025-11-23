@@ -2,11 +2,17 @@ package comp2450.UI;
 
 import com.github.lalyos.jfiglet.FigletFont;
 import com.google.common.base.Preconditions;
+import comp2450.Logic.MapLogic;
+import comp2450.Logic.RouteLogic;
 import comp2450.Model.Activity.Activity;
 import comp2450.Model.Exceptions.InvalidDistanceException;
 import comp2450.Model.Exceptions.InvalidNameException;
+import comp2450.Model.Exceptions.InvalidRouteException;
+import comp2450.Model.Exceptions.RoutesNotAdjacentException;
 import comp2450.Model.Map.Coordinates;
+import comp2450.Model.Map.Map;
 import comp2450.Model.Person.Gears;
+import comp2450.Model.Person.Person;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,8 +23,13 @@ import java.util.Scanner;
 public class CreateActivityDisplay {
 
     private final Scanner sc;
+    final private MapLogic ml;
+    final private RouteLogic rl;
 
-    public CreateActivityDisplay() {
+
+    public CreateActivityDisplay(Map map, Person person) {
+        this.ml = new MapLogic(map);
+        this.rl = new RouteLogic(person);
         this.sc = new Scanner(System.in);
     }
 
@@ -94,13 +105,27 @@ public class CreateActivityDisplay {
         builder.calendar(date);
     }
 
-    private void getRouteInput(Activity.ActivityBuilder builder){
+    private void getRouteInput(Activity.ActivityBuilder builder) {
         Preconditions.checkNotNull(builder, "Builder cannot be null");
 
-        CreateRouteDisplay route = new CreateRouteDisplay();
-        List<Coordinates> routes = route.CreateRoute();
-        builder.route(routes);
+        List<Coordinates> routes = null;
+        do{
 
+            try{
+                CreateRouteDisplay route = new CreateRouteDisplay(ml, rl);
+                routes= route.createRoute();
+                builder.route(routes);
+            }catch(InvalidRouteException ire){
+                System.out.println("There should be at least one Coordinate for the Route to Exist");
+                routes = null;
+            }catch(RoutesNotAdjacentException rne){
+
+                System.out.println("Each coordinate should be adjacent to each other, it cannot have jumps or move diagonally");
+                routes = null;
+            }
+
+        }
+        while(routes == null);
     }
 
 }

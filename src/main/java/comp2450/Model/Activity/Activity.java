@@ -3,6 +3,7 @@ package comp2450.Model.Activity;
 import comp2450.Model.Exceptions.InvalidDistanceException;
 import comp2450.Model.Exceptions.InvalidNameException;
 import comp2450.Model.Exceptions.InvalidRouteException;
+import comp2450.Model.Exceptions.RoutesNotAdjacentException;
 import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.Coordinates;
@@ -95,16 +96,46 @@ public class Activity implements IMapDataType {
 
             return this;
         }
-        public ActivityBuilder route(List<Coordinates> route) throws InvalidRouteException {
+        public ActivityBuilder route(List<Coordinates> route) throws InvalidRouteException, RoutesNotAdjacentException {
             Preconditions.checkNotNull(route, "route to be added cannot be null");
 
             if(route.size() <1 ){
                 throw new InvalidRouteException();
             }
+            if(!checkAdjacent(route)){
+                throw new RoutesNotAdjacentException();
+            }
             this.routeTaken = route;
             return this;
 
         }
+        private boolean checkAdjacent(List<Coordinates> cod){
+
+            if (cod.size() == 1) {
+                return true;
+            }
+
+            int i = 0;
+            boolean err = false;
+
+            while (i + 1 < cod.size() && !err) {
+
+                Coordinates curr = cod.get(i);
+                Coordinates next = cod.get(i + 1);
+
+                int adjX = Math.abs(curr.xCoordinates() - next.xCoordinates());
+                int adjY = Math.abs(curr.yCoordinates() - next.yCoordinates());
+
+                if (!((adjX == 1 && adjY == 0) || (adjX == 0 && adjY == 1))) {
+                    err = true;
+                }
+
+                i++;
+            }
+
+            return !err;
+        }
+
         public ActivityBuilder distance(double distance) throws InvalidDistanceException{
 
             if(distance<=0){

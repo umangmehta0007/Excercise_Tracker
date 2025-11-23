@@ -27,7 +27,7 @@
 //import comp2450.Model.Map.*;
 //import comp2450.Model.Map.Map;
 //import comp2450.Model.Person.Person;
-//import comp2450.Output.*;
+//import comp2450.UI.Output.*;
 //import comp2450.Model.Map.Coordinates;
 //
 //import java.util.*;

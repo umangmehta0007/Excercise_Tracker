@@ -1,4 +1,4 @@
-package comp2450.Output;
+package comp2450.UI.Output;
 
 import comp2450.Model.Map.Obstacle;
 import comp2450.Model.Map.Coordinates;
