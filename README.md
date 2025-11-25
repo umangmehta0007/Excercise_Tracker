@@ -13,11 +13,11 @@ However, due to accessibility issues and knowledge limitations, we're using a gr
 Map and GPS to record and track our data. The program begins as just you've finished a workout and came on
 your desk to enter all details about it.
 
-* As you begin, it records your information as in Starva/Apple fitness( Here it asks for name and weight).
-* There is MAP which creates a Grid with Rows and Columns defined by the user along with user defined obstacles.   
-* Track workouts including the gears used and the route taken. 
-* The goal is to have your data stored and print them when you need details. (Example: Viewing the data within user specified date range)
-
+* In this updated phase, As you being you're asked either to Create Profile or sign in if you have existing file.
+* After signing in successfully you're able to see feed of the people you follow, add/remove follower, manage your current profile.
+* Under managing your profile you'll be able to add activites, add/remove obstacles, add/remove gears.
+* The new thing about adding activity here would be you can now choose they you want to find the Route. 
+* Either you can enter manually, choose from your existing activites or enter starting and ending points for your route system will find a route for you from either of your existing one's or the follower's list. 
 
 # Flows of interaction
 
@@ -31,7 +31,6 @@ flowchart
     homescreen[[Home Screen]]
 
     homescreen ==Create Profile==> enterDetails
-    homescreen==Sign in using existing===>existing
 
     enterDetails[Create Profile: Name and Weight]
     processplayer{Create Person}
@@ -44,7 +43,7 @@ flowchart
     existing[Select a Profile]
     loader{Load Profile}
     
-    successLogin[[Profile Screen]]
+    successLogin[Profile Screen]
 
     homescreen ==Sign in using existing==> existing
     
@@ -58,13 +57,15 @@ flowchart
     addfol[[Add Follower]]
     removefol[[Remove Follower]]
     manager[[Profile Management]]
+    
+    Logout{Logout Profile}
 
     successLogin==FeedSelection==>viewact
     successLogin==FeedSelection==>viewfol
     successLogin==FeedSelection==>addfol
     successLogin==FeedSelection==>removefol
     successLogin==ProfileManagement==>manager
-    successLogin==selection==>Logout
+    successLogin==Logout==>Logout
 
 
 
@@ -75,7 +76,7 @@ flowchart
     removefol -..-> successLogin
     manager -..-> successLogin
 
-    Logout -..-> homescreen
+    Logout -.Succesfully Logout to Home Screen.-> homescreen
 
 
 
@@ -88,13 +89,13 @@ flowchart
 
     viewact[[View Your Activities]]
     
-    printMap{Print the activity via map}
+    printMap{Loads Activity}
 
     viewact ==Select Activity to View==>printMap
 
     printMap -.Invalid Selection.-> viewact
 
-    printMap -..-> success
+    printMap -.Prints the Map Including activity.-> success
 
     success[[Feed Success View]]
 
@@ -106,13 +107,13 @@ flowchart
 
     viewact[[View followers Activities]]
     
-    printMap{Print the activity via map}
+    printMap{Loads Activity of Follower}
 
     viewact ==Select Activity to View==>printMap
 
     printMap -.Invalid Selection.-> viewact
 
-    printMap -..-> success
+    printMap -.Prints the Map Including activity.-> success
 
     success[[Following feed Success View]]
 ```
@@ -164,7 +165,7 @@ flowchart
     removeGear[[Remove Gear]]
     addObs[[Add Obstacle]]
     removeObs[[Remove Obstacle]]
-    returnFeed[[Return to Feed]]
+    returnFeed{Return to Feed}
 
     viewact ==Add Activity==> addAct
     viewact ==Add Gear==> addGear
@@ -174,33 +175,8 @@ flowchart
     viewact ==Return to Feed==> returnFeed
 
 
-    returnFeed-..->viewact
+    returnFeed-.Moves to Profile Screen.->viewact
 ```
-### Add Activity
-
-```mermaid
-flowchart
-
-    addAct[[Add Activity]]
-
-    chooseGear{Add Gear}
-    chooseRoute{Create Route}
-    success[[Activity Added Successfully]]
-
-    addAct ==nameInput,Date and Select Gear==>chooseGear
-   %%addAct ==DateInput==>chooseGear
-    %%addAct==selectGear==>chooseGear
-    
-    chooseGear -.Invalid Entry.-> addAct
-
-    chooseGear ==Selecting method to create Route==> chooseRoute
-    chooseRoute -.Invalid Entry.-> chooseGear
-
-    chooseRoute -.Adding Activity to Person.-> success
-    
-   
-```
-
 ### Add Gears
 
 ```mermaid
@@ -269,21 +245,39 @@ flowchart
     gearCreation -.Removing Obstacle from Map.-> success
    
 ```
-### Creating Route
+### Creating Actvity
 
 ```mermaid
 flowchart
 
-    createRoute[[Create Route]]
+    addAct[[Add Activity]]
+
+    chooseRoute{Activity Processing}
+    success[[Activity Added Successfully]]
+
+    addAct ==nameInput,Date, Distance and Select Gear==>chooseRoute
+
+%%addAct ==DateInput==>chooseGear
+%%addAct==selectGear==>chooseGear
+
+
+    chooseRoute -.Adds Gear to Activity.-> createRoute
+    chooseRoute -.Invalid Entry.-> addAct
+
+
+        
+        
+        
+    createRoute[Create Route]
     manual[Choose Route Manually]
     
     existing[Choose Route from Existing Routes]
-    exist{Getting Route from Chosen Activity}
+    exist{Getting Route from Activity}
     
     path[Find Path Using starting and ending point]
-    pathf{Finding Path from the Given Coordinates}
+    pathf{Finding Path}
     
-    success[[Created Success]]
+    success{Creating Activity}
     
     manCod{Adding Coordinates for Route}
 
@@ -304,18 +298,23 @@ flowchart
 
     exist-.AddedRoute to Activity.->success
 
-    path==Entering Starting and Ending Coordinates==>chooseSource
+    path==Entering Coordinates & choosing source for route==>pathf
     %%chooseFromOwnActivity====>pathf
     %%chooseFromFollowers====>pathf
 
+    pathf-.InvalidEntry.->path
 
-    chooseSource ==Own Activity==> pathf
-    chooseSource ==Followers' Activity==> pathf
+    %%chooseSource ==Own Activity==> pathf
+    %%chooseSource ==Followers' Activity==> pathf
     
-    pathf-.Invalid Selection.->chooseSource
     pathf-.NoRouteAvailable.->createRoute
     pathf-.AddedRoute to Activity.->success
+    
+    success-..->
 
+    created[[Activity created Success]]
+
+    
 
 
 
