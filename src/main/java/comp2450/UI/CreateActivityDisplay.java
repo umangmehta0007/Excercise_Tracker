@@ -1,20 +1,15 @@
 package comp2450.UI;
 
-import com.github.lalyos.jfiglet.FigletFont;
 import com.google.common.base.Preconditions;
+import comp2450.Exceptions.Exceptions.InvalidSelectionException;
 import comp2450.Logic.MapLogic;
+import comp2450.Logic.PersonLogic;
 import comp2450.Logic.RouteLogic;
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Exceptions.InvalidDistanceException;
-import comp2450.Model.Exceptions.InvalidNameException;
-import comp2450.Model.Exceptions.InvalidRouteException;
-import comp2450.Model.Exceptions.RoutesNotAdjacentException;
+import comp2450.Exceptions.*;
 import comp2450.Model.Map.Coordinates;
-import comp2450.Model.Map.Map;
 import comp2450.Model.Person.Gears;
-import comp2450.Model.Person.Person;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -25,12 +20,13 @@ public class CreateActivityDisplay {
     private final Scanner sc;
     final private MapLogic ml;
     final private RouteLogic rl;
+    final private PersonLogic pl;
 
-
-    public CreateActivityDisplay(Map map, Person person) {
-        this.ml = new MapLogic(map);
-        this.rl = new RouteLogic(person);
+    public CreateActivityDisplay(MapLogic ml, PersonLogic pl) {
+        this.ml = ml;
+        this.pl = pl;
         this.sc = new Scanner(System.in);
+        this.rl = new RouteLogic(pl,this.ml); // could do map
     }
 
     public Activity createActivity(){
@@ -39,62 +35,103 @@ public class CreateActivityDisplay {
         getNameInput(builder);
         getGearInput(builder);
         getCalendarInput(builder);
-        getRouteInput(builder);
         getDistanceInput(builder);
+        getRouteInput(builder);
 
         return builder.build();
     }
     private void getNameInput(Activity.ActivityBuilder builder) {
 
         Preconditions.checkNotNull(builder, "Builder cannot be null");
-        String name;
+        String getName= null;
         do {
-            System.out.print("Enter name: ");
-            name = sc.nextLine();
+            System.out.println("Enter name: ");
+            getName = sc.nextLine();
             try {
-                builder.name(name);
+                builder.createName(getName);
             } catch (InvalidNameException e) {
-                name = null;
+                getName = null;
             }
-        } while (name == null);
+        } while (getName == null);
     }
 
-    private void getGearInput(Activity.ActivityBuilder builder){
+    private void getGearInput(Activity.ActivityBuilder builder) {
 
         Preconditions.checkNotNull(builder, "Builder cannot be null");
 
-        CreateGearDisplay gear = new CreateGearDisplay();
-        Gears gearUsed =  gear.createGear();
+        Gears gearUsed =  getGearInput();
         builder.gears(gearUsed);
 
     }
+    private Gears getGearInput() {
 
+        List<Gears> gears = pl.gears();
+
+        Gears gear = null;
+
+        System.out.println("Select gear to use:");
+
+        for (int i = 0; i < gears.size(); i++) {
+            System.out.println((i + 1) + ". " + gears.get(i).getName());
+        }
+
+
+        while (gear == null) {
+            System.out.println("Enter the gear you want to select ");
+            int index = inputSelection() - 1;
+
+            try {
+                gear = pl.getGear(index);
+            } catch (InvalidSelectionException e) {
+                System.out.println("Invalid choice. Try again.");
+                gear = null;
+            }
+        }
+
+        return gear;
+    }
+
+    private int inputSelection() {
+        int value = -1;
+        boolean valid = false;
+
+        while (!valid) {
+            try {
+                value = sc.nextInt();
+                sc.nextLine();
+                valid = true;
+            } catch (InputMismatchException ime) {
+                sc.nextLine();
+                System.out.println("Input must be a digit number like 1,2,3..");
+            }
+        }
+
+        return value;
+    }
     private void getDistanceInput(Activity.ActivityBuilder builder) {
 
         Preconditions.checkNotNull(builder, "Builder cannot be null");
         System.out.println("Please enter the distance covered (in KM) :");
-        double distance = -1.0;
+        double coverage = -1.0;
 
         do {
             System.out.println("Enter distance :");
 
             try {
-                distance = sc.nextDouble();
+                coverage = sc.nextDouble();
+                builder.distance(coverage);
                 sc.nextLine();
-                builder.distance(distance);
 
             } catch (InputMismatchException ime) {
                 System.out.println("Please enter a valid NUMBER (e.g 3.2)");
-                sc.nextLine();
-                distance = -1.0;
+                coverage = -1.0;
             }
             catch (InvalidDistanceException ide) {
                 System.out.println("Please enter a valid NUMBER greater than zero: ");
-                sc.nextLine(); // clear invalid input
-                distance = -1.0;
+                coverage = -1.0;
             }
 
-        } while (distance <= 0);
+        } while (coverage <= 0);
     }
 
     private void getCalendarInput(Activity.ActivityBuilder builder){
@@ -110,7 +147,6 @@ public class CreateActivityDisplay {
 
         List<Coordinates> routes = null;
         do{
-
             try{
                 CreateRouteDisplay route = new CreateRouteDisplay(ml, rl);
                 routes= route.createRoute();

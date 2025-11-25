@@ -26,7 +26,7 @@ public class CreateCalendarDisplay {
         LocalDateTime date = null;
 
         do {
-            System.out.println("\nEnter: YEAR MONTH DAY HOUR MINUTE SECOND");
+            System.out.println("Enter: YEAR MONTH DAY HOUR MINUTE SECOND");
             System.out.println("Example: 2025 11 14 15 30 00");
 
             String line = sc.nextLine().trim();

@@ -2,6 +2,7 @@ package comp2450.Model.Map;
 
 
 import com.google.common.base.Preconditions;
+import comp2450.Exceptions.InvalidNameException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,12 +29,32 @@ public class Obstacle implements IMapDataType{
         }
 
     }
-    public Obstacle(String name){
+
+    private Obstacle(String name){
         this.name = name;
         this.coordinatesCovered = new ArrayList<>();
         checkObstacle();
     }
 
+    public static class ObstacleBuilder {
+
+        private String name;
+        public ObstacleBuilder() {}
+
+        public ObstacleBuilder createName(String name) throws InvalidNameException {
+            Preconditions.checkNotNull(name, "Name cannot be null");
+            if (name.isBlank()) {
+                throw new InvalidNameException();
+            }
+            this.name = name;
+            return this;
+        }
+
+        public Obstacle build() {
+            Preconditions.checkNotNull(name, "Obstacle must have a name before building");
+            return new Obstacle(name);
+        }
+    }
 
     /**
      * Adds {@link Coordinates} to the list of my all {@link #coordinatesCovered}

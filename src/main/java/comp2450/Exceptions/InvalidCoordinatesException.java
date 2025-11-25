@@ -1,4 +1,4 @@
-package comp2450.Model.Exceptions;
+package comp2450.Exceptions;
 
 /**
  * Thrown when X or Y coordinate values are invalid.

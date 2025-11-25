@@ -4,7 +4,7 @@
 
 ### Author: Umang Mehta (7885176)
 
-#### Date: October 30, 2025
+#### Date: November 24, 2025
 
 # Overview
 
@@ -18,18 +18,347 @@ your desk to enter all details about it.
 * Track workouts including the gears used and the route taken. 
 * The goal is to have your data stored and print them when you need details. (Example: Viewing the data within user specified date range)
 
-## Phase 1 Feedback Improvements
 
-- Removed Route class and now represent routes directly using Coordinates and  RouteTaken in `Activity` class was be marked a list.
-- Added different list of Activities inside Map, which is used to ensure route coordinates remain valid
-- Removed `isRoute()` from the Obstacle, as suggested by feedback.
-- Introduced `instanceof` only where necessary for grid printing.
-- Combined PersonStatistic functionality into Person to simplify the model.
-- added a loop to check for null values in  coordinates of a Route `routeTaken`
-- Added class invariants in Map to ensure coordinates of obstacles and route stay within grid bounds.
-- Added validation inside private Map methods to maintain grid consistency.
-- Introduced `Empty` class to avoid null grid cells and better represent empty spaces.
-- Initialized all grid cells as `Empty` objects inside Map constructor.
+# Flows of interaction
+
+## Diagrams
+
+### Login Page
+
+```mermaid
+
+flowchart
+    homescreen[[Home Screen]]
+
+    homescreen ==Create Profile==> enterDetails
+    homescreen==Sign in using existing===>existing
+
+    enterDetails[Create Profile: Name and Weight]
+    processplayer{Create Person}
+    
+    enterDetails==Enter Name and Weight==>processplayer
+    processplayer -.Can't create valid person.->enterDetails
+    processplayer -.Successfully Created a player.->homescreen
+
+
+    existing[Select a Profile]
+    loader{Load Profile}
+    
+    successLogin[[Profile Screen]]
+
+    homescreen ==Sign in using existing==> existing
+    
+    existing==Selected Profile==>loader
+    
+    loader -.Invalid Selections.->existing
+    loader -.SuccessLogin.->successLogin
+    
+    viewact[[View your activites]]
+    viewfol[[View followers activities]]
+    addfol[[Add Follower]]
+    removefol[[Remove Follower]]
+    manager[[Profile Management]]
+
+    successLogin==FeedSelection==>viewact
+    successLogin==FeedSelection==>viewfol
+    successLogin==FeedSelection==>addfol
+    successLogin==FeedSelection==>removefol
+    successLogin==ProfileManagement==>manager
+    successLogin==selection==>Logout
+
+
+
+
+    viewact -..-> successLogin
+    viewfol -..-> successLogin
+    addfol -..-> successLogin
+    removefol -..-> successLogin
+    manager -..-> successLogin
+
+    Logout -..-> homescreen
+
+
+
+```
+
+### View your activities
+
+```mermaid
+flowchart
+
+    viewact[[View Your Activities]]
+    
+    printMap{Print the activity via map}
+
+    viewact ==Select Activity to View==>printMap
+
+    printMap -.Invalid Selection.-> viewact
+
+    printMap -..-> success
+
+    success[[Feed Success View]]
+
+```
+
+### View Followers Activities
+```mermaid
+flowchart
+
+    viewact[[View followers Activities]]
+    
+    printMap{Print the activity via map}
+
+    viewact ==Select Activity to View==>printMap
+
+    printMap -.Invalid Selection.-> viewact
+
+    printMap -..-> success
+
+    success[[Following feed Success View]]
+```
+### Add Follower
+
+```mermaid
+flowchart
+
+    viewact[[Add Follower]]
+    
+    printMap{Add Person}
+
+    viewact ==Select Person to add as Following==>printMap
+
+    printMap -.Invalid Selection/Empty List of people.-> viewact
+
+    printMap -.Adds Person to your following list.-> success
+
+    success[[Added Successfully]]
+```
+### Remove Follower
+
+```mermaid
+flowchart
+
+    viewact[[Remove Follower]]
+    
+    printMap{Remove Person}
+
+    viewact ==Select Person to remove from Following==>printMap
+
+    printMap -.Invalid Selection/Empty List of following.-> viewact
+
+    printMap -.Removes Person to your following list.-> success
+
+    success[[Added Successfully]]
+```
+
+### Profile Management
+
+```mermaid
+flowchart
+
+
+    viewact[[Profile Management]]
+
+    addAct[[Add Activity]]
+    addGear[[Add Gear]]
+    removeGear[[Remove Gear]]
+    addObs[[Add Obstacle]]
+    removeObs[[Remove Obstacle]]
+    returnFeed[[Return to Feed]]
+
+    viewact ==Add Activity==> addAct
+    viewact ==Add Gear==> addGear
+    viewact ==Remove Gear==> removeGear
+    viewact ==Add Obstacle==> addObs
+    viewact ==Remove Obstacle==> removeObs
+    viewact ==Return to Feed==> returnFeed
+
+
+    returnFeed-..->viewact
+```
+### Add Activity
+
+```mermaid
+flowchart
+
+    addAct[[Add Activity]]
+
+    chooseGear{Add Gear}
+    chooseRoute{Create Route}
+    success[[Activity Added Successfully]]
+
+    addAct ==nameInput,Date and Select Gear==>chooseGear
+   %%addAct ==DateInput==>chooseGear
+    %%addAct==selectGear==>chooseGear
+    
+    chooseGear -.Invalid Entry.-> addAct
+
+    chooseGear ==Selecting method to create Route==> chooseRoute
+    chooseRoute -.Invalid Entry.-> chooseGear
+
+    chooseRoute -.Adding Activity to Person.-> success
+    
+   
+```
+
+### Add Gears
+
+```mermaid
+flowchart
+
+    addgears[[Add Gears]]
+
+    gearCreation{Create Gear}
+    success[[successfully Added]]
+
+    addgears ==nameInput and usesInput==>gearCreation
+    %%addgears ==usesInput==>gearCreation
+
+    gearCreation -.Invalid Entry.-> addgears
+    gearCreation -.Adding Gears to Person Profile.-> success
+    
+   
+```
+
+### Remove Gears
+
+```mermaid
+flowchart
+
+    addgears[[Remove Gears]]
+
+    gearCreation{Remove Gear}
+    success[[successfully Removed]]
+
+    addgears ==Choose Gear to Remove==>gearCreation
+    gearCreation -.Invalid Entry.-> addgears
+    gearCreation -.Removing Gears from Person Profile.-> success
+    
+   
+```
+### Add Obstacle
+```mermaid
+flowchart
+
+    addgears[[Add Obstacle]]
+
+    gearCreation{Create Obstacle}
+    success[[successfully Removed]]
+
+    addgears ==Enter Name,Choose Coordinates for Obstacle==>gearCreation
+    %%addgears ==Choose Coordinates for Obstacle==>gearCreation
+
+    gearCreation -.Invalid Entry/Invalid Coordinates.-> addgears
+    gearCreation -.Adds Obstacle to Map.-> success
+   
+```
+
+### Remove Obstacle
+
+```mermaid
+flowchart
+
+    addgears[[Remove Obstacle]]
+
+    gearCreation{Remove Obstacle}
+    success[[successfully Removed]]
+
+    addgears ==Choose Obstacle==>gearCreation
+
+    gearCreation -.Invalid Entry.-> addgears
+    gearCreation -.Removing Obstacle from Map.-> success
+   
+```
+### Creating Route
+
+```mermaid
+flowchart
+
+    createRoute[[Create Route]]
+    manual[Choose Route Manually]
+    
+    existing[Choose Route from Existing Routes]
+    exist{Getting Route from Chosen Activity}
+    
+    path[Find Path Using starting and ending point]
+    pathf{Finding Path from the Given Coordinates}
+    
+    success[[Created Success]]
+    
+    manCod{Adding Coordinates for Route}
+
+
+    createRoute ==Manual Selection==> manual
+    createRoute ==Existing Route==> existing
+    createRoute ==Path Finding==> path
+        
+    
+    manual==Enter The Coordinates==>manCod
+    manCod-.continue adding.->manual
+    manCod-.Invalid Entry.->manual
+    manCod-.AddedRoute to Activity.->success
+    
+    existing==Choosing Activity you want the Route from==>exist
+    exist-.Invalid Entry.->existing
+    exist-.NoRouteAvailable.->createRoute
+
+    exist-.AddedRoute to Activity.->success
+
+    path==Entering Starting and Ending Coordinates==>chooseSource
+    %%chooseFromOwnActivity====>pathf
+    %%chooseFromFollowers====>pathf
+
+
+    chooseSource ==Own Activity==> pathf
+    chooseSource ==Followers' Activity==> pathf
+    
+    pathf-.Invalid Selection.->chooseSource
+    pathf-.NoRouteAvailable.->createRoute
+    pathf-.AddedRoute to Activity.->success
+
+
+
+
+
+
+
+
+
+```
+
+## Resources
+* Franklin's Repository - Literally The biggest help I could have used. 
+* Stack interface was taken from 
+<https://code.cs.umanitoba.ca/comp2450-fall2025/2450-stack/-/blob/main/src/main/java/ca/umanitoba/cs/umbrist1/generics/stacks/Stack.java>
+
+
+Some notable components include:
+
+* [Subgraph (for entire tasks)](https://mermaid.js.org/syntax/flowchart.html#subgraphs)
+* [Double rectangle (start/end subtasks)](https://mermaid.js.org/syntax/flowchart.html#a-node-in-a-subroutine-shape)
+* [Diamond (for processing)](https://mermaid.js.org/syntax/flowchart.html#decision-diamond)
+* [Styling lines (scroll down, there's a table! thick lines for input, dashed lines for outputs)](https://mermaid.js.org/syntax/flowchart.html#minimum-length-of-a-link)
+
+
+
+
+## Phase 2 Changes
+
+- Implementation of UI and Logic layers was done, in which UI was reponsible for Validation and Logic Layer was used for processing and returning Domain Model Objects.
+- Logic Layers updated/changed the state of my Domain model objects.
+- All Validations eg: If it's a valid selection was done inside the UI
+- A lot of methods were taken off form the domain model object and were directly put inside the Logic class
+- Map here has became the basic example of Single Responsibility Principle and list of activates were taken and were processed by Logic now.
+- Direct instantiation of the domain model object were removed and were made through Builders
+- Coordinate which was a record before was changed to a class for the same building reason.
+- We now had a thing where like in real life we can follow people and look there feed which includes exercise they did.
+- A person now can remove/add followers with all powers same as phase 1
+- Map has now been hard-coded so that it can be used globally by anyone using the software, we have a common map
+- For adding activities now we have three different ways, which were choosing manually, choose from User's existing, and Path finding.
+- For path finding we created algorithm that would ask for first and last coordinates you want and choose the way you want to exlore the route.
+- Path could be chose either from the followers list or the self's list of activities done.
+- Lastly, for the route finding algorithm Stack and linked list(self-created) was used to implement alg.
+
 
 [Starva]: https://en.wikipedia.org/wiki/Strava
 [Apple Fitness]: https://en.wikipedia.org/wiki/Fitness_(Apple)
@@ -56,18 +385,23 @@ mvn compile exec:java -Dexec.mainClass="comp2450.Main"
 * Making records was not an easy task and direct help was used from :
 <https://dev.java/learn/records/>
 
-* Discussion forums were a BIG part of learning, along with discussion with classmates which continuously led me implement the 
-changes and learning new stuff. (luckily there's no e-Link for friends).
+* This Phase 2 has been quite intense, not a lot of questions but a lot of thinking and working on real stuff
+* AI Disclaimer: All implementations and logic were self created, all logic layer to UI were created, however some syntax's were asked form ChatGPT like the new Switch learnt, 
+* I also tend to learn some understanding of Logic and UI but never shared the code, some technical and basic questions were asked that helped building some stuff but never asked for any code.
+* Questions like: can we have multiple logic layers, inside logic layers, how would that affect the design and many more. But NO CODE/ LOGIC was taken. 
+* Some design patterns were learnt too. 
+
+* For learning More about Layers a Youtube channel was used :
+<https://www.youtube.com/@ApnaCollegeOfficial>
 
 * Mermaid's Syntax for class diagrams was not a piece of cake, used this as s guide: 
 <https://mermaid.js.org/syntax/classDiagram.html>
 
-* To learn about new classes and frameworks used like: Calendar, TreeSet, Lists :
+* To learn about new classes and frameworks used like: LocalDateTime, TreeSet, Lists :
  <https://docs.oracle.com/javase/8/docs/api/allclasses-noframe.html>
 
-* To be honest chatGPT helped me study a lot about topics and definitions by being concise to the topic and in easy and understandable english words.
-* I explored multiple approaches for creating the grid. Initially I had one idea, but after discussion with classmates and reviewing suggestions from Professor and examples from ChatGPT.
-* I implemented an interface-based solution. ( No snippet was taken from anywhere, totally own work after learning implementations.)
+* Computer Science help centre people have been a great help as well as my those classmates who did clear a lot of questions. 
+
 ```mermaid
 
 classDiagram
@@ -79,8 +413,11 @@ classDiagram
     <li>weight > 0</li>
     <li>myActivityList != null</li>
     <li>gearsEquipped != null</li>
+    <li>following != null</li>
     <li>loop: myActivityList has no null elements</li>
     <li>loop: gearsEquipped has no null elements</li>
+    <li>loop: following has no null elements</li>
+ 
     </ul>"
     class Person{
 
@@ -89,18 +426,28 @@ classDiagram
 
         -list~Activity~activitiesDone
         -list~Gear~gearsEquipped
+        -list~Person~following
 
+        -activities(LocalDateTime startDate, LocalDateTime endDate) List~Activity~
+        +totalCalories(LocalDateTime startDate, LocalDateTime endDate) double
+        +totalDistance(LocalDateTime startDate, LocalDateTime endDate) double
+        +compareTo(Person other) int
+        +equals(Object o) boolean
+        
         +addActivity(Activity activity) void
         +removeActivity(int index) void
 
         +addGear(Gears gear) void
         +removeGear(Gears gear) void
+        
+        +addFollower(Person person)void
+        +removeFollower(Person person) void
 
         +getName() String
         +getMyActivityList() List~Activity~
         +getGearsEquipped() Set~Gears~
         +getWeight() double
-        +setWeight(double weight) void
+        +getFollowing() Set~Person~
     }
     note for Activity "Invariant Properties
     <ul>
@@ -112,8 +459,6 @@ classDiagram
     <li>date != null</li>
     <li>startingCoordinate!=null</li>
     <li>distance > 0</li>
-    <li>currWeight > 0</li>
-    <li>caloriesBurnt >= 0</li>
     <li>loop: check if coordinates of Route are assigned a null value<li>
     </ul>
      "
@@ -123,18 +468,15 @@ classDiagram
         -String name
         -Gears gearsUsed
         -List~Coordinates~ routeTaken
-        -Calendar date
-        -Coordinates startingCoordinate
+        -LocalDateTime date
         -double distance
-        -double currWeight
-        -double caloriesBurnt
-
+        
+        
         +getGears() ~Gear~
-        +getCalendar() ~Calendar~
+        +getCalendar() ~LocalDateTime~
         +getDistance() double
         +getName() String
-        +getcaloriesBurnt() double
-        +addCoordiantes()
+        +caloriesBurnt(Person p) double
         +getMappingObject() List~Coordinates~
     }
 
@@ -150,9 +492,6 @@ classDiagram
     <li>myGrid[0].length>=1 //checking for valid rows
     
     <li>loop: no obstacles added here are null</li>
-    <li>loop: no routes added inside each activity here are null</li>
-    <li>loop: no Coordinate inside obstacles lie outside map</li>
-    <li>loop: no Coordinate inside Route inside each activity lie outside map</li>
     <li> loop: each no coordinate of my Grid should be null </li>
     </ul>
         "
@@ -160,28 +499,18 @@ classDiagram
 
         -String name
         -list~Obstacles~obsctacles
-        -list~Activity~activities
         -Dimensions dimensions
         -IMapDataType[][] myGrid
 
         +addObstacles(Obstacle obs) void
         +removeObstacles(int index) void
-        +addActivity(Activity activity) void
-        +removeActivity(int index) void
-
-        +createGrid(List~Obstacle~ obstacles, list~Activity~route )
-        -addObstacleToGrid(List~Obstacle~ obstacles)
-        -addObs(Obstacle obs)
-        -addRouteToGrid(list~Activity~activities)
-        -addRoute(Activity act)
 
         +getObsInMap() List~Obstacle~
-        +getActivities() List~Activity~
         +getDimensions() Dimension
         +getGrid() IMapDataType[][]
         +getName() String
-
     }
+    
     note for Obstacle" Invariant Properties
     <ul>
     <li>name != null</li>
@@ -219,9 +548,13 @@ classDiagram
         <li> yCoordinate>=0 </li>
         <ul>"
     class Coordinates{
-        <<Record>>
         -int xCoordinate
         -int yCoordinate
+        
+        +xCoordinates() int
+        +yCoordinates() int
+        +equals(Object obj) boolean
+        
     }
 
     note for Gears "Invariant Properties
@@ -266,6 +599,49 @@ classDiagram
             -int nRows
             -int nCols
     }
+
+
+    note for Gears "Exercise Tracker
+         <ul>
+         <li>myList != null</li>
+         <li>loop: no People inside list are null</li>
+        </ul>
+        "
+    class ExerciseTracker{
+        -List~Person~myList
+        
+        +add(Person person) void
+        +getList() List~Person~
+        +remove(index) void
+    }
+
+    class Stack~T~ {
+        <<Interface>>
+        +push(T item) void
+        +pop() T
+        +size() int
+        +isEmpty() boolean
+    }
+
+    class LinkedListStack~T~ {
+        -Node~T~ top
+        -int size
+        
+        +push(T item) void
+        +pop() T
+        +size() int
+        +isEmpty() boolean
+    }
+
+    class Node~T~ {
+        -T data
+        -Node~T~ next
+    }
+
+    Stack <|.. LinkedListStack
+    LinkedListStack *-- Node~T~
+    
+    ExerciseTracker*--Person
     Person *-- Gears
     Person *-- Activity
     Person o-- Map

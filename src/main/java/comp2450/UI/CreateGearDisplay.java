@@ -1,7 +1,8 @@
 package comp2450.UI;
 
 import com.github.lalyos.jfiglet.FigletFont;
-import comp2450.Model.Exceptions.InvalidNameException;
+import com.google.common.base.Preconditions;
+import comp2450.Exceptions.InvalidNameException;
 import comp2450.Model.Person.Gears;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class CreateGearDisplay {
 
 
     private void nameBuilder(Gears.GearsBuilder builder) {
+        Preconditions.checkNotNull(builder, "Builder cannot be null");
 
         String name = null;
 
@@ -54,6 +56,7 @@ public class CreateGearDisplay {
         while(name == null);
     }
     private void usesBuilder(Gears.GearsBuilder builder) {
+        Preconditions.checkNotNull(builder, "Builder cannot be null");
 
         String uses = null;
 

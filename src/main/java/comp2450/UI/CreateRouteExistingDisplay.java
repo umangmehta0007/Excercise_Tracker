@@ -1,12 +1,10 @@
 package comp2450.UI;
 
-import comp2450.Logic.MapLogic;
 import comp2450.Logic.RouteLogic;
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Exceptions.InvalidRouteSelectionException;
-import comp2450.Model.Exceptions.NoActivityLeftToChooseException;
+import comp2450.Exceptions.InvalidRouteSelectionException;
+import comp2450.Exceptions.NoActivityLeftToChooseException;
 import comp2450.Model.Map.Coordinates;
-import comp2450.Model.Person.Person;
 
 import java.util.InputMismatchException;
 import java.util.List;

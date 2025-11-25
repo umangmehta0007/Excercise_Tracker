@@ -2,7 +2,7 @@ package comp2450.UI;
 
 import com.github.lalyos.jfiglet.FigletFont;
 import com.google.common.base.Preconditions;
-import comp2450.Model.Exceptions.InvalidCoordinatesException;
+import comp2450.Exceptions.InvalidCoordinatesException;
 import comp2450.Model.Map.Coordinates;
 
 import java.io.IOException;

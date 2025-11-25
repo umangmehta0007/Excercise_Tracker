@@ -1,7 +1,7 @@
 package comp2450.Model.Map;
 
 import com.google.common.base.Preconditions;
-import comp2450.Model.Exceptions.InvalidCoordinatesException;
+import comp2450.Exceptions.InvalidCoordinatesException;
 
 public class Coordinates {
 
@@ -9,9 +9,9 @@ public class Coordinates {
     private final int yCoordinates;
 
 
-    private static void validateCoordinates(int x, int y) {
-        Preconditions.checkState(x >= 0, "Coordinates of X need to be greater than equal to 0");
-        Preconditions.checkState(y >= 0, "Coordinates of Y need to be greater than equal to 0");
+    public void checkCoordinates() {
+        Preconditions.checkState(xCoordinates >= 0, "Coordinates of X need to be greater than equal to 0");
+        Preconditions.checkState(yCoordinates >= 0, "Coordinates of Y need to be greater than equal to 0");
     }
 
 
@@ -19,8 +19,7 @@ public class Coordinates {
         this.xCoordinates = xCoordinates;
         this.yCoordinates = yCoordinates;
 
-        validateCoordinates(xCoordinates,yCoordinates);
-
+        checkCoordinates();
     }
 
 
@@ -56,5 +55,13 @@ public class Coordinates {
         public Coordinates build() {
             return new Coordinates(x, y);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Preconditions.checkNotNull(obj, "Coordinates entered can never be null");
+        Coordinates other = (Coordinates) obj;
+        return (this.xCoordinates() == other.xCoordinates() &&
+                this.yCoordinates() == other.yCoordinates());
     }
 }

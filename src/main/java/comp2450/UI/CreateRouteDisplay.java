@@ -2,9 +2,11 @@ package comp2450.UI;
 
 import comp2450.Logic.MapLogic;
 import comp2450.Logic.RouteLogic;
-import comp2450.Model.Exceptions.NoActivityLeftToChooseException;
+import comp2450.Exceptions.InvalidRouteSelectionException;
+import comp2450.Exceptions.NoActivityLeftToChooseException;
+import comp2450.Exceptions.NoPathAvailableException;
+import comp2450.Exceptions.NoRouteAvailableException;
 import comp2450.Model.Map.Coordinates;
-import comp2450.Model.Person.Person;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -21,8 +23,6 @@ public class CreateRouteDisplay {
         sc = new Scanner (System.in);
         this.ml = ml;
         this.rl = rl;
-
-
     }
 
     public List<Coordinates> createRoute(){
@@ -30,32 +30,61 @@ public class CreateRouteDisplay {
         List<Coordinates> route = null;
         System.out.println("Let's create Route For our Activity");
 
-        try {
-            do {
-                int selection = waySelection();
-                switch (selection) {
-                    case 1: {
-                        route = getRouteManually();
-                        break;
-                    }
-                    case 2: {
-                        route = getRouteExisiting();
-                        break;
-                    }
-                    case 3: {
-                        route = getRoutePathFinding();
-                        break;
-                    }default:{
-                        System.out.println("Please make a valid selection 1,2,3");
+        int selection;
+        boolean done = false;
+
+        while(!done) {
+
+            try {
+
+                do {
+                    selection = waySelection();
+
+                    switch (selection) {
+                        case 1: {
+                            route = getRouteManually();
+                            done = true;
+                            break;
+                        }
+                        case 2: {
+                            route = getRouteExisiting();
+                            done = true;
+
+                            break;
+
+                        }
+                        case 3: {
+
+                            route = getRoutePathFinding();
+                            done = true;
+                            break;
+                        }
+//                        case 4: {
+//                            System.out.println("Exiting...");
+//                            done = true;
+//                        }
+                        default:
+                            throw new InvalidRouteSelectionException();
                     }
                 }
-            } while (route == null);
-        }catch(NoActivityLeftToChooseException nl){
 
-            System.out.println("There are no activities, please enter manually or select from your followers");
+                while (route == null);
 
+            } catch (NoActivityLeftToChooseException nl) {
+                System.out.println("There are no activities, please enter manually or select from your followers");
+                route = null;
+            } catch (InvalidRouteSelectionException ise) {
+                System.out.println(" Please make a valid selection 1,2 or 3");
+                route = null;
+            } catch (NoPathAvailableException npa) {
+                System.out.println("There are no Path available from chosen Starting and ending coordiantes");
+                route = null;
+            }catch(NoRouteAvailableException nre){
+                System.out.println("There are no Routes available to choose from");
+                route = null;
+
+            }
         }
-
         return route;
     }
 
@@ -91,10 +120,10 @@ public class CreateRouteDisplay {
         List<Coordinates> myRoute = existingRoute.getRoute();
         return myRoute;
     }
-    private List<Coordinates> getRoutePathFinding(){
+    private List<Coordinates> getRoutePathFinding() throws NoPathAvailableException, NoRouteAvailableException{
 
-        CreateRouteFindingDisplay findingRoute = new CreateRouteFindingDisplay();
-        List<Coordinates> myRoute = findingRoute.CreateRouteFindingDisplay();
+        CreateRouteFindingDisplay findingRoute = new CreateRouteFindingDisplay(ml, rl);
+        List<Coordinates> myRoute = findingRoute.getPathFindingRoute();
         return myRoute;
     }
 

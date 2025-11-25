@@ -1,9 +1,9 @@
 package comp2450.Model.Activity;
 
-import comp2450.Model.Exceptions.InvalidDistanceException;
-import comp2450.Model.Exceptions.InvalidNameException;
-import comp2450.Model.Exceptions.InvalidRouteException;
-import comp2450.Model.Exceptions.RoutesNotAdjacentException;
+import comp2450.Exceptions.InvalidDistanceException;
+import comp2450.Exceptions.InvalidNameException;
+import comp2450.Exceptions.InvalidRouteException;
+import comp2450.Exceptions.RoutesNotAdjacentException;
 import comp2450.Model.Map.IMapDataType;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Map.Coordinates;
@@ -38,7 +38,6 @@ public class Activity implements IMapDataType {
         Preconditions.checkNotNull(routeTaken, "Route Taken can never be null");
         Preconditions.checkState(routeTaken.size()>=1,"Route has to be non empty");
 
-
         Preconditions.checkNotNull(date, "Date can never be null");
         Preconditions.checkState(distance>0,"Distance has to be greater than zero");
         for(Coordinates cood: routeTaken){
@@ -70,11 +69,11 @@ public class Activity implements IMapDataType {
 
         public ActivityBuilder(){}
 
-        public ActivityBuilder name(String getName) throws InvalidNameException {
+        public ActivityBuilder createName(String getName) throws InvalidNameException {
 
             Preconditions.checkNotNull(getName, "Name cannot be null");
 
-            if(name.isBlank()){
+            if(getName.isBlank()){
                 throw new InvalidNameException();
             }
             this.name = getName;
@@ -87,6 +86,7 @@ public class Activity implements IMapDataType {
             Preconditions.checkNotNull(gears, "Gear to be added cannot be null");
 
             this.gearsUsed = gears;
+
             return this;
         }
         public ActivityBuilder calendar(LocalDateTime ldt){
@@ -111,14 +111,16 @@ public class Activity implements IMapDataType {
         }
         private boolean checkAdjacent(List<Coordinates> cod){
 
+            Preconditions.checkNotNull(cod, "Coordinates can never be null");
+
             if (cod.size() == 1) {
                 return true;
             }
 
             int i = 0;
-            boolean err = false;
+            boolean error = false;
 
-            while (i + 1 < cod.size() && !err) {
+            while (i + 1 < cod.size() && !error) {
 
                 Coordinates curr = cod.get(i);
                 Coordinates next = cod.get(i + 1);
@@ -127,20 +129,21 @@ public class Activity implements IMapDataType {
                 int adjY = Math.abs(curr.yCoordinates() - next.yCoordinates());
 
                 if (!((adjX == 1 && adjY == 0) || (adjX == 0 && adjY == 1))) {
-                    err = true;
+                    error = true;
                 }
 
                 i++;
             }
 
-            return !err;
+            return !error;
         }
 
-        public ActivityBuilder distance(double distance) throws InvalidDistanceException{
+        public ActivityBuilder distance(double check) throws InvalidDistanceException{
 
-            if(distance<=0){
+            if(check<=0){
                 throw new InvalidDistanceException();
             }
+            this.distance = check;
             return this;
         }
 

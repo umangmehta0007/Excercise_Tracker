@@ -1,4 +1,4 @@
-package comp2450.Model.Exceptions;
+package comp2450.Exceptions;
 
 public class InvalidDistanceException extends Exception{
 }

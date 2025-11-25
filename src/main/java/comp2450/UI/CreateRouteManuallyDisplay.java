@@ -1,8 +1,7 @@
 package comp2450.UI;
 
-import comp2450.Logic.Exceptions.CoordinatesOutOfBoundsException;
-import comp2450.Logic.Exceptions.ObstacleAlreadyExistsException;
-import comp2450.Logic.Exceptions.RouteAlreadyExistsException;
+import comp2450.Exceptions.Exceptions.CoordinatesOutOfBoundsException;
+import comp2450.Exceptions.Exceptions.ObstacleAlreadyExistsException;
 import comp2450.Logic.MapLogic;
 import comp2450.Model.Map.Coordinates;
 

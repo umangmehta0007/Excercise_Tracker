@@ -1,7 +1,7 @@
 package comp2450.UI;
 
-import comp2450.Model.Exceptions.InvalidWeightException;
-import comp2450.Model.Exceptions.InvalidNameException;
+import comp2450.Exceptions.InvalidWeightException;
+import comp2450.Exceptions.InvalidNameException;
 
 import comp2450.Model.Person.Person;
 import com.google.common.base.Preconditions;

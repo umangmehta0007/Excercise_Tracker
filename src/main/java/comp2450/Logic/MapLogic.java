@@ -1,13 +1,22 @@
 package comp2450.Logic;
 
-import comp2450.Logic.Exceptions.CoordinatesOutOfBoundsException;
-import comp2450.Logic.Exceptions.ObstacleAlreadyExistsException;
-import comp2450.Logic.Exceptions.RouteAlreadyExistsException;
+
+import com.google.common.base.Preconditions;
+import comp2450.Exceptions.Exceptions.CoordinatesOutOfBoundsException;
+import comp2450.Exceptions.Exceptions.InvalidSelectionException;
+import comp2450.Exceptions.Exceptions.ObstacleAlreadyExistsException;
+import comp2450.Exceptions.Exceptions.RouteAlreadyExistsException;
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Exceptions.InvalidCoordinatesException;
-import comp2450.Model.Exceptions.InvalidNameException;
-import comp2450.Model.Map.*;
-import comp2450.Model.Person.Person;
+import comp2450.Exceptions.InvalidCoordinatesException;
+import comp2450.Model.Map.Coordinates;
+import comp2450.Model.Map.Dimensions;
+import comp2450.Model.Map.Empty;
+import comp2450.Model.Map.IMapDataType;
+import comp2450.Model.Map.Map;
+import comp2450.Model.Map.Obstacle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapLogic {
 
@@ -21,19 +30,31 @@ public class MapLogic {
         this.dim = map.getDimensions();
     }
 
+    public void checkMapLogic(){
+        Preconditions.checkNotNull(map, "Map can never be null");
+        Preconditions.checkNotNull(dim, "Dimensions can never be null");
+    }
+
     public Map getMap(){
         return this.map;
     }
 
     public void checkValidRouteCood(Coordinates cod) throws CoordinatesOutOfBoundsException, ObstacleAlreadyExistsException {
 
+        Preconditions.checkNotNull(cod, "Coordinates to be check should never be null");
+        checkMapLogic();
         checkWithinBound(cod);
         notObstacle(cod);
+        checkMapLogic();
     }
-    public void checkValidObsCod(Coordinates cod) throws CoordinatesOutOfBoundsException,RouteAlreadyExistsException {
+    public void checkValidObsCod(Coordinates cod) throws CoordinatesOutOfBoundsException, RouteAlreadyExistsException, ObstacleAlreadyExistsException {
 
+        checkMapLogic();
         checkWithinBound(cod);
-        notRoute(cod);
+        //notRoute(cod);
+        notObstacle(cod);
+        checkMapLogic();
+
     }
 
     public Dimensions getDimensions(){
@@ -45,75 +66,190 @@ public class MapLogic {
         map.addObstacle(obs);
     }
 
-    public void removeObstacle(int index) {
-        map.getObsInMap().remove(index);
+    public void removeObstacle(int index) throws InvalidSelectionException {
+
+        Preconditions.checkState(index>=0, "index should alwyas eb greater than = 0");
+
+        checkMapLogic();
+
+        if(index<0 || index>map.getObsInMap().size()){
+            throw new InvalidSelectionException();
+        }
+
+        map.removeObstacle(index);
+
+        checkMapLogic();
+
+
     }
 
-    public void addActivity(Activity act) {
-        map.addActivity(act);
+    public List<Obstacle> getAllObstacle(){
+
+        return map.getObsInMap();
     }
 
-    public void removeActivity(int index) {
-        map.getActivities().remove(index);
+    public void createGrid(List<Activity> routes) throws InvalidCoordinatesException {
+
+        Preconditions.checkNotNull(routes, "Activity to be check should never be null");
+        for(var r: routes){
+            Preconditions.checkNotNull(r, "Activity in list to be check should never be null");
+        }
+
+        checkMapLogic();
+
+        resetGrid();
+
+        addObstacleToGrid(map.getObsInMap());
+        addRouteToGrid(routes);
+
+        checkMapLogic();
+
+
     }
 
+    private void addObstacleToGrid(List<Obstacle> obstacles) {
 
-    private void checkWithinBound(Coordinates cod) throws CoordinatesOutOfBoundsException {
+        Preconditions.checkNotNull(obstacles, "Obstacles to be check should never be null");
+        for(var r: obstacles){
+            Preconditions.checkNotNull(r, "Obstacles in list to be check should never be null");
+        }
+        checkMapLogic();
+
+        IMapDataType[][] grid = map.getGrid();
+
+        for (Obstacle obs : obstacles) {
+            addObs(grid, obs);
+        }
+
+        checkMapLogic();
+
+    }
+
+    private void addObs(IMapDataType[][] grid, Obstacle obs) {
+
+        Preconditions.checkNotNull(grid, "Grid can never be null");
+        Preconditions.checkNotNull(obs, "Obstacle can never be null");
+
+
+        checkMapLogic();
+        List<Coordinates> myObsC = new ArrayList<>(obs.getMappingObject());
+
+        for (Coordinates cod : myObsC) {
+            int x = cod.xCoordinates();
+            int y = cod.yCoordinates();
+            grid[x][y] = obs;
+        }
+
+        checkMapLogic();
+
+    }
+
+    private void addRouteToGrid(List<Activity> activities) {
+
+        Preconditions.checkNotNull(activities, "Activity to be check should never be null");
+        for(var r: activities){
+            Preconditions.checkNotNull(r, "Activity in list to be check should never be null");
+        }
+
+        checkMapLogic();
+
+        IMapDataType[][] grid = map.getGrid();
+
+        for (Activity activity : activities) {
+            addRoute(grid, activity);
+        }
+
+        checkMapLogic();
+
+    }
+
+    private void addRoute(IMapDataType[][] grid, Activity act) {
+
+        Preconditions.checkNotNull(grid, "Grid can never be null");
+        Preconditions.checkNotNull(act, "Activity can never be null");
+        checkMapLogic();
+
+        List<Coordinates> route = act.getMappingObject();
+
+        for (Coordinates cod : route) {
+            int x = cod.xCoordinates();
+            int y = cod.yCoordinates();
+            grid[x][y] = act;
+        }
+
+        checkMapLogic();
+    }
+
+    public void checkWithinBound(Coordinates cod) throws CoordinatesOutOfBoundsException {
+
+        Preconditions.checkNotNull(cod, "Coordinates can never be null");
+
+        checkMapLogic();
+
         int x = cod.xCoordinates();
+
         int y = cod.yCoordinates();
 
         if(x>=(dim.nRows()) || y>=(dim.nCols())){
             throw new CoordinatesOutOfBoundsException();
         }
+        checkMapLogic();
+
 
     }
-    private void notObstacle(Coordinates cod) throws ObstacleAlreadyExistsException{
 
-        int x = cod.xCoordinates();
-        int y = cod.yCoordinates();
-        IMapDataType[][] myGrid = map.getGrid();
-        if(myGrid[x][y] instanceof Obstacle){
-            throw new ObstacleAlreadyExistsException();
+    private void notObstacle(Coordinates cod) throws ObstacleAlreadyExistsException {
+        Preconditions.checkNotNull(cod, "Coordinates can never be null");
+
+        checkMapLogic();
+
+
+        //resetting grid everytime to add updated obstacles
+        List<Obstacle> list = map.getObsInMap();
+        for (var obs : list) {
+            List<Coordinates> coords = obs.getMappingObject();
+            for (Coordinates c : coords) {
+                if (c.equals(cod)) {
+                    throw new ObstacleAlreadyExistsException();
+                }
+            }
         }
+        checkMapLogic();
+
     }
 
     public void resetGrid() throws InvalidCoordinatesException {
 
+        checkMapLogic();
 
         IMapDataType[][] myGrid = map.getGrid();
 
-        for(int i = 0; i<myGrid.length;i++){
-            for(int j = 0; j<myGrid[i].length;j++){
+        for (int i = 0; i < myGrid.length; i++) {
+            for (int j = 0; j < myGrid[i].length; j++) {
 
+                Coordinates cod = new Coordinates.CoordinateBuilder()
+                        .xCoordinates(i)
+                        .yCoordinates(j)
+                        .build();
 
-
-                IMapDataType data = myGrid[i][j];
-
-                if(data instanceof Activity){
-                    Coordinates cod = new Coordinates.CoordinateBuilder()
-                            .xCoordinates(i)
-                            .yCoordinates(j)
-                            .build();
-
-                    myGrid[i][j] = new Empty(cod);
-                }
-
-                //replacing null with Empty Objects created.
-
+                myGrid[i][j] = new Empty(cod);   // ALWAYS reset to empty
             }
         }
+        checkMapLogic();
 
     }
-    private void notRoute(Coordinates cod) throws RouteAlreadyExistsException {
+//    private void notRoute(Coordinates cod) throws RouteAlreadyExistsException {
+//
+//        for (Activity act : personActivitiesOrGlobalList) {
+//            for (Coordinates c : act.getMappingObject()) {
+//                if (c.equals(cod)) {
+//                    throw new RouteAlreadyExistsException();
+//                }
+//            }
+//        }
+//    }
 
-        int x = cod.xCoordinates();
-        int y = cod.yCoordinates();
-        IMapDataType[][] myGrid = map.getGrid();
-        if(myGrid[x][y] instanceof Activity){
-            throw new RouteAlreadyExistsException();
-        }
-    }
 
-
-
+    //if my map doesn't hold activites now It will hold al activitties of all persons as whole,
+        //now I'll have
 }

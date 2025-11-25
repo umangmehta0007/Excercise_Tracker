@@ -2,7 +2,7 @@ package comp2450.Model.Person;
 
 import comp2450.Model.Activity.Activity;
 import com.google.common.base.Preconditions;
-import comp2450.Model.Exceptions.InvalidNameException;
+import comp2450.Exceptions.InvalidNameException;
 
 /**
  * Represent Gears equipped by the {@link Person} and also used in {@link Activity}.
@@ -23,12 +23,9 @@ public class Gears implements Comparable<Gears> {
     }
 
 
-
     private Gears(String name, String uses){
         this.name = name;
         this.uses = uses;
-
-       // allGears.add(this);
 
         checkGears();
     }

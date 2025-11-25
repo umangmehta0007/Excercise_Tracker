@@ -4,8 +4,8 @@ package comp2450.Model.Person;
 import comp2450.Model.Activity.Activity;
 
 import com.google.common.base.Preconditions;
-import comp2450.Model.Exceptions.InvalidWeightException;
-import comp2450.Model.Exceptions.InvalidNameException;
+import comp2450.Exceptions.InvalidWeightException;
+import comp2450.Exceptions.InvalidNameException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,7 +17,7 @@ import java.util.*;
  * A {@link Gears}, {@link Activity} can be added/removed from the person's list.
  * {@link #weight} can be updated anytime during the Program.
  */
-public class Person {
+public class Person implements Comparable<Person> {
 
     final private String name;
     private double weight;
@@ -28,6 +28,8 @@ public class Person {
 
     private void checkPerson(){
     Preconditions.checkNotNull(name, "Name of the person can never be null");
+    Preconditions.checkNotNull(following, "Following the people can never be null");
+
     Preconditions.checkState(name.length()>=1, "Person should be assigned a non empty name");
     Preconditions.checkNotNull(myActivityList, "Activity List should never be null");
     Preconditions.checkNotNull(gearsEquipped, "List of gears should never be null");
@@ -35,6 +37,12 @@ public class Person {
 
     for(Activity currAct: myActivityList ){
         Preconditions.checkNotNull(currAct,"Activity in a person should never be null");
+    }
+
+    for(var following: following){
+
+        Preconditions.checkNotNull(following,"Person in following  should never be null");
+
     }
     for(Gears currGear: gearsEquipped ){
         Preconditions.checkNotNull(currGear,"Gears for a person should never be null");
@@ -97,6 +105,7 @@ public class Person {
      * @param activity is the {@link Activity} to be added to the list
      */
     public void addActivity(Activity activity){
+        Preconditions.checkNotNull(activity, "Added activity can never be null");
         checkPerson(); //Precondition check
         myActivityList.add(activity);
         checkPerson();//Postcondition check
@@ -108,6 +117,8 @@ public class Person {
      * @param index To be removed from the list.
      */
     public void removeActivity(int index){
+
+        Preconditions.checkState(index>=0, "Index should always be greater than equal to 0");
         checkPerson();
         myActivityList.remove(index);
         checkPerson();
@@ -118,6 +129,9 @@ public class Person {
      * @param gear is the {@link Gears} to be added to the list
      */
     public void addGear(Gears gear){
+        Preconditions.checkNotNull(gear, "Added gear can never be null");
+
+
         checkPerson();
 
         gearsEquipped.add(gear);
@@ -130,6 +144,8 @@ public class Person {
      * @param gear, removes the {@link Gears} at that index
      */
     public void removeGear(Gears gear){
+
+        Preconditions.checkNotNull(gear, "Removing gear can never be null");
         checkPerson();
 
         gearsEquipped.remove(gear);
@@ -138,13 +154,20 @@ public class Person {
     }
 
     public void addFollower(Person person){
+        Preconditions.checkNotNull(person, "Added person can never be null");
+
         following.add(person);
     }
-    public void removeFollower(int index){
-        following.remove(index);
+    public void removeFollower(Person person){
+        Preconditions.checkNotNull(person, "removable person can never be null");
+
+        following.remove(person);
     }
 
     private ArrayList<Activity> activities(final LocalDateTime startDate, final LocalDateTime endDate){
+
+        Preconditions.checkNotNull(startDate, "Dates can never be null");
+        Preconditions.checkNotNull(endDate, "Dates can never be null");
 
         ArrayList<Activity> activitiesInRange = new ArrayList<>();
 
@@ -162,6 +185,9 @@ public class Person {
 
     public double totalCalories( final LocalDateTime startDate, final LocalDateTime endDate) {
 
+        Preconditions.checkNotNull(startDate, "Dates can never be null");
+        Preconditions.checkNotNull(endDate, "Dates can never be null");
+
         ArrayList<Activity> myActivities = activities(startDate, endDate);
 
         double totalCalories = 0;
@@ -173,6 +199,10 @@ public class Person {
     }
     public double totalDistance(final LocalDateTime startDate, final LocalDateTime endDate){
 
+
+        Preconditions.checkNotNull(startDate, "Dates can never be null");
+        Preconditions.checkNotNull(endDate, "Dates can never be null");
+
         ArrayList<Activity> myActivities = activities(startDate, endDate);
 
         double totalDistance = 0;
@@ -181,6 +211,12 @@ public class Person {
         }
 
         return totalDistance;
+    }
+
+    public int compareTo(Person other) {
+        Preconditions.checkNotNull(other, "Comaparable person should never be null");
+        checkPerson();
+        return this.name.compareTo(other.name);
     }
 
     public String getName() {
@@ -195,5 +231,22 @@ public class Person {
     public TreeSet<Gears> getGearsEquipped() {
         return gearsEquipped;
     }
+    public TreeSet<Person> getFollowing() {
+        return this.following;
+    }
+
+
+    //This was not my implemenation checked online for this equals:will mention in mermaid diag.
+    @Override
+    public boolean equals(Object o) {
+        Preconditions.checkNotNull(o, "Person to check can never be null");
+
+        Person other = (Person) o;
+        return this.name.equals(other.name);
+    }
+
+
+
+
 
 }
