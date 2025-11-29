@@ -16,8 +16,8 @@ public class CreateObstacleDisplay {
     private final Scanner sc;
     private final MapLogic ml;
 
-    public CreateObstacleDisplay(MapLogic ml) {
-        this.sc = new Scanner(System.in);
+    public CreateObstacleDisplay(Scanner sc, MapLogic ml) {
+        this.sc = sc;
         this.ml = ml;
     }
 
@@ -63,7 +63,7 @@ public class CreateObstacleDisplay {
         System.out.println("Enter FIRST coordinate:");
 
         while (!added) {
-            CreateCoordinateDisplay builder = new CreateCoordinateDisplay();
+            CreateCoordinateDisplay builder = new CreateCoordinateDisplay(sc);
             Coordinates cod = builder.createCoordinates();
 
             try {

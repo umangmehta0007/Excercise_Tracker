@@ -24,9 +24,7 @@ public class MapLogic {
   final private Dimensions dim;
 
     public MapLogic(Map map) {
-
         this.map = map;
-        //this.person = person;
         this.dim = map.getDimensions();
     }
 

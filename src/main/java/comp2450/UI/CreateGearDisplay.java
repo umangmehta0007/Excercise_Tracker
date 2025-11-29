@@ -13,9 +13,9 @@ public class CreateGearDisplay {
     final private Scanner sc;
 
 
-    public CreateGearDisplay(){
+    public CreateGearDisplay(Scanner sc){
 
-        sc = new Scanner (System.in);
+        this.sc = sc;
     }
 
     public Gears createGear(){

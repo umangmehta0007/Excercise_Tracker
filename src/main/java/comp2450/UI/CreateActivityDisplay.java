@@ -22,11 +22,13 @@ public class CreateActivityDisplay {
     final private RouteLogic rl;
     final private PersonLogic pl;
 
-    public CreateActivityDisplay(MapLogic ml, PersonLogic pl) {
+    public CreateActivityDisplay(Scanner sc, MapLogic ml, PersonLogic pl, RouteLogic rl) {
+        this.sc = sc;
         this.ml = ml;
         this.pl = pl;
-        this.sc = new Scanner(System.in);
-        this.rl = new RouteLogic(pl,this.ml); // could do map
+        this.rl = rl;
+
+        //this.rl = new RouteLogic(pl,this.ml); // could do map
     }
 
     public Activity createActivity(){
@@ -75,10 +77,10 @@ public class CreateActivityDisplay {
             System.out.println((i + 1) + ". " + gears.get(i).getName());
         }
 
-
         while (gear == null) {
             System.out.println("Enter the gear you want to select ");
             int index = inputSelection() - 1;
+            sc.nextLine();
 
             try {
                 gear = pl.getGear(index);
@@ -98,7 +100,6 @@ public class CreateActivityDisplay {
         while (!valid) {
             try {
                 value = sc.nextInt();
-                sc.nextLine();
                 valid = true;
             } catch (InputMismatchException ime) {
                 sc.nextLine();
@@ -119,10 +120,11 @@ public class CreateActivityDisplay {
 
             try {
                 coverage = sc.nextDouble();
-                builder.distance(coverage);
                 sc.nextLine();
+                builder.distance(coverage);
 
             } catch (InputMismatchException ime) {
+                sc.nextLine();
                 System.out.println("Please enter a valid NUMBER (e.g 3.2)");
                 coverage = -1.0;
             }
@@ -137,7 +139,7 @@ public class CreateActivityDisplay {
     private void getCalendarInput(Activity.ActivityBuilder builder){
         Preconditions.checkNotNull(builder, "Builder cannot be null");
 
-        CreateCalendarDisplay dateCreator = new CreateCalendarDisplay();
+        CreateCalendarDisplay dateCreator = new CreateCalendarDisplay(sc);
         LocalDateTime date =  dateCreator.createCalendar();
         builder.calendar(date);
     }
@@ -148,7 +150,7 @@ public class CreateActivityDisplay {
         List<Coordinates> routes = null;
         do{
             try{
-                CreateRouteDisplay route = new CreateRouteDisplay(ml, rl);
+                CreateRouteDisplay route = new CreateRouteDisplay(sc, ml, rl);
                 routes= route.createRoute();
                 builder.route(routes);
             }catch(InvalidRouteException ire){

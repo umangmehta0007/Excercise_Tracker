@@ -22,8 +22,8 @@ public class Person implements Comparable<Person> {
     final private String name;
     private double weight;
     final private List<Activity> myActivityList;
-    final private TreeSet<Gears> gearsEquipped;// Uses TreeSet to ensure unique and sorted gears
-    final private TreeSet<Person> following;
+    final private Set<Gears> gearsEquipped;// Uses TreeSet to ensure unique and sorted gears
+    final private Set<Person> following;
 
 
     private void checkPerson(){
@@ -228,10 +228,10 @@ public class Person implements Comparable<Person> {
     public List<Activity> getMyActivityList() {
         return myActivityList;
     }
-    public TreeSet<Gears> getGearsEquipped() {
+    public Set<Gears> getGearsEquipped() {
         return gearsEquipped;
     }
-    public TreeSet<Person> getFollowing() {
+    public Set<Person> getFollowing() {
         return this.following;
     }
 

@@ -15,9 +15,9 @@ public class CreateRouteExistingDisplay {
     private final Scanner sc;
 
 
-    public CreateRouteExistingDisplay(RouteLogic rl){
+    public CreateRouteExistingDisplay(Scanner sc, RouteLogic rl){
 
-        sc = new Scanner(System.in);
+        this.sc = sc;
         this.rl = rl;
     }
 
@@ -32,6 +32,8 @@ public class CreateRouteExistingDisplay {
 
             try {
                 int index = routeSelectionScreen();
+                sc.nextLine();
+
                 route= rl.getRoute(index);
 
             } catch (InvalidRouteSelectionException nel) {
@@ -61,8 +63,6 @@ public class CreateRouteExistingDisplay {
 
             try {
                 result = sc.nextInt();
-                sc.nextLine();
-
             }catch(InputMismatchException e) {
                 System.out.println("Selected move must be a positive whole number, e.g., 5");
                 result = -1;

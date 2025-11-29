@@ -15,8 +15,8 @@ public class CreatePersonDisplay {
 
     private final Scanner sc;
 
-    public CreatePersonDisplay() {
-        this.sc = new Scanner(System.in);
+    public CreatePersonDisplay(Scanner sc) {
+        this.sc = sc;
     }
 
     public Person createPerson() {

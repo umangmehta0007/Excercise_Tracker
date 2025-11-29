@@ -12,32 +12,26 @@ import comp2450.Model.Map.Coordinates;
 import comp2450.Model.Map.Dimensions;
 import comp2450.Model.Person.Person;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class RouteLogic {
     private final PersonLogic pl;
     private final MapLogic ml;
-    private final List<Activity> act;
+    //private final List<Activity> act;
 
     public RouteLogic(PersonLogic pl, MapLogic ml) {
         this.pl = pl;
-        this.act =  pl.getPerson().getMyActivityList();
         this.ml = ml;
     }
 
     public void checkRouteLogic(){
         Preconditions.checkNotNull(pl, "Logic of person can never be null");
         Preconditions.checkNotNull(ml, "Logic of Map can never be null");
-        Preconditions.checkNotNull(act, "Activities of person can never be null");
-        for(var x: act){
-            Preconditions.checkNotNull(x, "Activities of person can never be null");
-        }
+
     }
     public List<Activity> activityList(){
-        return this.act;
+
+        return pl.getPerson().getMyActivityList();
     }
 
     public List<Coordinates> getRoute(int index) throws InvalidRouteSelectionException {
@@ -45,6 +39,9 @@ public class RouteLogic {
         Preconditions.checkState(index>=0, "Index should alwayas be >=0");
 
         checkRouteLogic();
+
+        var act =  pl.getPerson().getMyActivityList();
+
         if(index<0 || index>=act.size()){
             throw new InvalidRouteSelectionException();
         }
@@ -129,7 +126,7 @@ public class RouteLogic {
 
     private List<Coordinates> pathFindingAlg(boolean[][]myGrid, List<Coordinates>sePoints)throws NoPathAvailableException{
 
-        Preconditions.checkNotNull(sePoints, "Starting and ending coordinatate can never be null");
+        Preconditions.checkNotNull(sePoints, "Starting and ending coordinate can never be null");
         for(var x: sePoints){
             Preconditions.checkNotNull(x, "Starting and ending coordinate can never be null");
         }
@@ -185,24 +182,24 @@ public class RouteLogic {
 
         try {
             North = new Coordinates.CoordinateBuilder().xCoordinates(currX-1).yCoordinates(currY).build();
-        } catch (InvalidCoordinatesException ice) {
+        } catch (InvalidCoordinatesException ignored) {
 
         }
 
         try {
             South = new Coordinates.CoordinateBuilder().xCoordinates(currX + 1).yCoordinates(currY).build();
-        } catch (InvalidCoordinatesException ice) {
+        } catch (InvalidCoordinatesException ignored) {
 
         }
 
         try {
             East  = new Coordinates.CoordinateBuilder().xCoordinates(currX).yCoordinates(currY+1).build();
-        } catch (InvalidCoordinatesException ice) {
+        } catch (InvalidCoordinatesException ignored) {
         }
 
         try {
             West  = new Coordinates.CoordinateBuilder().xCoordinates(currX).yCoordinates(currY-1).build();
-        } catch (InvalidCoordinatesException ice) {
+        } catch (InvalidCoordinatesException ignored) {
 
         }
 
@@ -264,6 +261,8 @@ public class RouteLogic {
         Preconditions.checkNotNull(dim, "Dimensions can not be assigned as null");
         checkRouteLogic();
 
+        var act =  pl.getPerson().getMyActivityList();
+
 
         boolean[][] grid = new boolean[dim.nRows()][dim.nCols()];
 
@@ -291,7 +290,7 @@ public class RouteLogic {
 
         boolean[][] grid = new boolean[dim.nRows()][dim.nCols()];
 
-        TreeSet<Person> followersSet = pl.getPerson().getFollowing();
+        Set<Person> followersSet = pl.getPerson().getFollowing();
         ArrayList<Person> followers = new ArrayList<>(followersSet);
 
         for (Person follower : followers) {
@@ -312,25 +311,5 @@ public class RouteLogic {
 
         return grid;
     }
-
-
-//    public boolean check() {
-//        boolean exists = false;
-//
-//        List<Person> followers = pl.followers();
-//
-//        if (!followers.isEmpty()) {
-//
-//            for (Person p : followers) {
-//                if (!p.getMyActivityList().isEmpty()) {
-//                    exists = true;
-//                }
-//            }
-//        }
-//
-//        return exists;
-//    }
-
-
 
 }

@@ -11,8 +11,8 @@ public class CreateCalendarDisplay {
 
     final private Scanner sc;
 
-    public CreateCalendarDisplay() {
-        sc = new Scanner(System.in);
+    public CreateCalendarDisplay(Scanner sc) {
+        this.sc = sc;
     }
 
     public LocalDateTime createCalendar() {

@@ -20,9 +20,9 @@ public class CreateRouteFindingDisplay {
     private final MapLogic ml;
     private final RouteLogic rl;
 
-    public CreateRouteFindingDisplay(MapLogic ml, RouteLogic rl) {
+    public CreateRouteFindingDisplay(Scanner sc, MapLogic ml, RouteLogic rl) {
         this.rl = rl;
-        this.sc = new Scanner(System.in);
+        this.sc = sc;
         this.ml = ml;
     }
 
@@ -63,7 +63,7 @@ public class CreateRouteFindingDisplay {
         Coordinates cod = null;
 
         do {
-            CreateCoordinateDisplay builder = new CreateCoordinateDisplay();
+            CreateCoordinateDisplay builder = new CreateCoordinateDisplay(sc);
             cod = builder.createCoordinates();
 
             try {

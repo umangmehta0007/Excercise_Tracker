@@ -14,8 +14,8 @@ public class CreateRouteManuallyDisplay{
     private Scanner sc;
     private MapLogic ml;
 
-    public CreateRouteManuallyDisplay(MapLogic ml) {
-        sc = new Scanner(System.in);
+    public CreateRouteManuallyDisplay(Scanner sc, MapLogic ml) {
+        this.sc = sc;
         this.ml = ml;
     }
 
@@ -27,9 +27,10 @@ public class CreateRouteManuallyDisplay{
         while (keepAdding) {
 
             keepAdding = askToContinue();
+            sc.nextLine();
 
             if(keepAdding){
-                CreateCoordinateDisplay builder = new CreateCoordinateDisplay();
+                CreateCoordinateDisplay builder = new CreateCoordinateDisplay(sc);
                 Coordinates cod = builder.createCoordinates();
 
                 try{
@@ -56,18 +57,19 @@ public class CreateRouteManuallyDisplay{
         boolean valid = false;
         boolean result = false;
 
-        while (!valid) {
+        int choice = -1;
+
+        while (choice == -1) {
             System.out.println("Do you want to coordinate?");
             System.out.println("Enter 1 for Yes");
             System.out.println("Enter 2 for No");
 
-            int choice = -1;
-
             try {
                 choice = sc.nextInt();
-                sc.nextLine();
             } catch (InputMismatchException e) {
                 sc.nextLine();
+                choice= -1;
+                System.out.println("Please enter a whole number: ");
             }
 
             if (choice == 1) {

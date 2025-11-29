@@ -18,9 +18,9 @@ public class CreateRouteDisplay {
     final private MapLogic ml;
     final private RouteLogic rl;
 
-    public CreateRouteDisplay(MapLogic ml, RouteLogic rl) {
+    public CreateRouteDisplay(Scanner sc, MapLogic ml, RouteLogic rl) {
 
-        sc = new Scanner (System.in);
+        this.sc = sc;
         this.ml = ml;
         this.rl = rl;
     }
@@ -39,6 +39,7 @@ public class CreateRouteDisplay {
 
                 do {
                     selection = waySelection();
+                    sc.nextLine();
 
                     switch (selection) {
                         case 1: {
@@ -99,8 +100,8 @@ public class CreateRouteDisplay {
                 System.out.println("1.Choose Route Manually \n 2.Choose Route from Existing Routes \n 3. Find Path Using starting and ending point.");
 
              result =sc.nextInt();
-             sc.nextLine();
             }catch(InputMismatchException ime){
+                sc.nextLine();
                 System.out.println("Please select a valid whole number:1,2,3");
             }
         }
@@ -110,19 +111,19 @@ public class CreateRouteDisplay {
 
     private List<Coordinates> getRouteManually(){
 
-        CreateRouteManuallyDisplay manualRoute = new CreateRouteManuallyDisplay(ml);
+        CreateRouteManuallyDisplay manualRoute = new CreateRouteManuallyDisplay(sc, ml);
         List<Coordinates> myRoute = manualRoute.createRouteManually();
         return myRoute;
     }
     private List<Coordinates> getRouteExisiting() throws NoActivityLeftToChooseException {
 
-        CreateRouteExistingDisplay existingRoute = new CreateRouteExistingDisplay(rl);
+        CreateRouteExistingDisplay existingRoute = new CreateRouteExistingDisplay(sc,rl);
         List<Coordinates> myRoute = existingRoute.getRoute();
         return myRoute;
     }
     private List<Coordinates> getRoutePathFinding() throws NoPathAvailableException, NoRouteAvailableException{
 
-        CreateRouteFindingDisplay findingRoute = new CreateRouteFindingDisplay(ml, rl);
+        CreateRouteFindingDisplay findingRoute = new CreateRouteFindingDisplay(sc, ml, rl);
         List<Coordinates> myRoute = findingRoute.getPathFindingRoute();
         return myRoute;
     }

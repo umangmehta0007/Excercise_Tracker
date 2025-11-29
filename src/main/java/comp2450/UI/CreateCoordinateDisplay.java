@@ -13,10 +13,10 @@ public class CreateCoordinateDisplay {
 
     final private Scanner sc;
 
-    public CreateCoordinateDisplay(){
-        sc = new Scanner(System.in);
-    }
+    public CreateCoordinateDisplay(Scanner sc){
 
+        this.sc = sc;
+    }
 
     public Coordinates createCoordinates(){
 
@@ -45,7 +45,6 @@ public class CreateCoordinateDisplay {
             System.out.println("Please enter the X coordinate ");
             try {
                 x = sc.nextInt();
-
                 sc.nextLine();
                 builder.xCoordinates(x);
             }

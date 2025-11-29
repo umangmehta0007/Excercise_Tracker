@@ -4,8 +4,8 @@ import comp2450.Exceptions.Exceptions.InvalidSelectionException;
 import comp2450.Logic.PersonLogic;
 import comp2450.Logic.MapLogic;
 import comp2450.Exceptions.Exceptions.InvalidGearSelectionException;
+import comp2450.Logic.RouteLogic;
 import comp2450.Model.Activity.Activity;
-import comp2450.Model.Map.Map;
 import comp2450.Model.Map.Obstacle;
 import comp2450.Model.Person.Gears;
 
@@ -19,11 +19,14 @@ public class PersonManagementDisplay {
     private final Scanner sc;
     private final PersonLogic pl;
     private final MapLogic ml;
+    private final RouteLogic rl;
 
-    public PersonManagementDisplay(PersonLogic pl,  Map map) {
-        this.sc = new Scanner(System.in);
+
+    public PersonManagementDisplay(Scanner sc, PersonLogic pl, MapLogic map, RouteLogic rl) {
+        this.sc = sc;
         this.pl = pl;
-        this.ml = new MapLogic(map);
+        this.ml = map;
+        this.rl = rl;
     }
 
     public void startTracking() {
@@ -32,6 +35,7 @@ public class PersonManagementDisplay {
         while (keepGoing) {
             printMenu();
             int choice = inputSelection();
+            sc.nextLine();
 
             switch (choice) {
                 case 1:
@@ -78,7 +82,6 @@ public class PersonManagementDisplay {
         while (!valid) {
             try {
                 value = sc.nextInt();
-                sc.nextLine();
                 valid = true;
             } catch (InputMismatchException ime) {
                 sc.nextLine();
@@ -94,16 +97,15 @@ public class PersonManagementDisplay {
 
         if(pl.gears().size() <= 0) {
 
-            System.out.println("You cannot add activit without having gears: ");
+            System.out.println("You cannot add activity without having gears: ");
 
         }
         else {
                 Activity act = null;
 
-                CreateActivityDisplay activityDisaply = new CreateActivityDisplay(ml, pl);
+                CreateActivityDisplay activityDisplay = new CreateActivityDisplay(sc, ml, pl,rl );
 
-                act = activityDisaply.createActivity();
-
+                act = activityDisplay.createActivity();
                 pl.addActivity(act);
                 System.out.println("Activity added.");
         }
@@ -140,7 +142,7 @@ public class PersonManagementDisplay {
 //    }
 
     private void addGear() {
-        CreateGearDisplay gd = new CreateGearDisplay();
+        CreateGearDisplay gd = new CreateGearDisplay(sc);
         Gears gear = gd.createGear();
 
         pl.addGear(gear);
@@ -182,7 +184,7 @@ public class PersonManagementDisplay {
 
     private void addObstacle() {
 
-        CreateObstacleDisplay obsUI = new CreateObstacleDisplay(ml);
+        CreateObstacleDisplay obsUI = new CreateObstacleDisplay(sc, ml);
 
         Obstacle obs = obsUI.createObstacle();
 

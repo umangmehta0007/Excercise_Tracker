@@ -15,8 +15,8 @@ import java.util.List;
 
 public class PersonLogic {
 
-    private final Person person;
-    private final List<Person> earthPeople;
+    private Person person;
+    private List<Person> earthPeople;
 
 
     private void checkPersonLogic() {
@@ -27,10 +27,7 @@ public class PersonLogic {
         }
     }
 
-    public PersonLogic(Person person, List<Person> earthPeople) {
-        this.person = person;
-        this.earthPeople = earthPeople;
-        checkPersonLogic();
+    public PersonLogic() {
     }
 
 
@@ -219,5 +216,25 @@ public class PersonLogic {
         checkPersonLogic();
         return followers.get(index);
     }
+
+    /*
+    Setter For dependency Injection
+     */
+
+    public void setPerson(Person p){
+        Preconditions.checkNotNull(p, "Person can never be null");
+        this.person = p;
+    }
+    public void setPeople(List<Person> p){
+        Preconditions.checkNotNull(p, "Person's List to be assigned should never be null");
+        for(var x : p){
+            Preconditions.checkNotNull(x, "Person in a List to be assigned should never be null");
+        }
+
+        this.earthPeople = p;
+    }
+
+
+
 
 }

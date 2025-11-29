@@ -1,25 +1,28 @@
 package comp2450.UI;
 
+import com.google.common.base.Preconditions;
 import comp2450.Exceptions.Exceptions.InvalidSelectionException;
 import comp2450.Logic.MapLogic;
+import comp2450.Logic.PersonLogic;
 import comp2450.Logic.Tracker;
 import comp2450.Model.Person.ExerciseTracker;
 import comp2450.Model.Map.Map;
 import comp2450.Model.Person.Person;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class TrackerDisplay {
 
     private Tracker tracker;
-    private final Scanner sc;
-    private MapLogic ml;
+    private  Scanner sc;
+    private FeedDisplay feed;
 
-    public TrackerDisplay(ExerciseTracker tracker, Map map) {
-        sc = new Scanner(System.in);
-        this.tracker = new Tracker(tracker);
-        this.ml = new MapLogic(map);
+    public TrackerDisplay(Scanner sc, Tracker tracker, FeedDisplay feed) {
+        this.sc = sc;
+        this.tracker = tracker;
+        this.feed = feed;
     }
 
     public void startRecording(){
@@ -33,6 +36,7 @@ public class TrackerDisplay {
 
             headsUp();
             int selection = getInputForSelection();
+            sc.nextLine();
 
             switch (selection) {
                 case 1: {
@@ -49,6 +53,7 @@ public class TrackerDisplay {
 
                     System.out.println("Exiting.....Thank you For your time.......... :) :) :) :)");
                     done = true;
+                    break;
                 }
                 default: {
                     System.out.println("Please try again!!");
@@ -73,9 +78,8 @@ public class TrackerDisplay {
         while (!done) {
             try {
                 value = sc.nextInt();
-                sc.nextLine();
                 done = true;
-            } catch (Exception e) {
+            } catch (InputMismatchException e) {
                 sc.nextLine();
                 System.out.println("Please enter a number not alphabets.");
             }
@@ -86,7 +90,7 @@ public class TrackerDisplay {
 
 
     private void createPerson() {
-        CreatePersonDisplay cpd = new CreatePersonDisplay();
+        CreatePersonDisplay cpd = new CreatePersonDisplay(sc);
         Person newPerson = cpd.createPerson();
 
         tracker.addPerson(newPerson);
@@ -95,7 +99,9 @@ public class TrackerDisplay {
     }
 
 
-    private void signInTiger() {
+    public void signInTiger() {
+
+        Person p = null;
 
         List<Person> allPeople = tracker.getPeople();
 
@@ -122,13 +128,31 @@ public class TrackerDisplay {
                     System.out.println("Invalid selection. Try again.");
                 }
             }
-
             System.out.println("Welcome " + user.getName() + "!");
 
-            FeedDisplay feed = new FeedDisplay(user, tracker.getPeople(), ml);
-            feed.displayFeed();
+            callFeed(user);
+
         }
+
+
+        /*
+        So question is here my UI is calling other UI for phase 2, this is correct
+        But for phase 3 since we have dependency inversion principle, we should not do this
+        Now main should be the one responsible for this? separation?
+         */
     }
 
-    
+    private void callFeed(Person person) {
+
+        Preconditions.checkNotNull(person, "Person can never be assigned as null");
+
+        feed.setPersonLogic(person);
+
+        feed.setPersonList(tracker.getPeople());
+
+        feed.displayFeed();
+
+    }
+
+
 }

@@ -6,24 +6,28 @@ import comp2450.Exceptions.Exceptions.InvalidFollowerSelectionException;
 import comp2450.Exceptions.Exceptions.InvalidSelectionException;
 import comp2450.Logic.MapLogic;
 import comp2450.Logic.PersonLogic;
+import comp2450.Logic.RouteLogic;
 import comp2450.Model.Activity.Activity;
 import comp2450.Exceptions.InvalidCoordinatesException;
 import comp2450.Model.Person.Person;
 import comp2450.UI.Output.MapLegend;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class FeedDisplay {
 
     private final Scanner sc;
-    private final PersonLogic pl;
+    private PersonLogic pl;
     private final MapLogic ml;
+    private PersonManagementDisplay pmd;
 
-    public FeedDisplay(Person person,List<Person> all, MapLogic ml) {
-        this.sc = new Scanner(System.in);
-        this.pl = new PersonLogic(person, all);
+    public FeedDisplay(Scanner sc,PersonLogic pl, MapLogic ml, PersonManagementDisplay pmd) {
+        this.sc = sc;
         this.ml = ml;
+        this.pl = pl;
+        this.pmd = pmd;
     }
 
     public void displayFeed() {
@@ -35,6 +39,7 @@ public class FeedDisplay {
             printMenu();
 
             int choice = getInputForSelection();
+            sc.nextLine();
 
             switch (choice) {
 
@@ -46,8 +51,7 @@ public class FeedDisplay {
 
                 case 4 -> removeFollower();
 
-                case 5 -> new PersonManagementDisplay(pl, ml.getMap())
-                        .startTracking();
+                case 5 -> managerPerson();
 
                 case 6 -> {
                     done = true;
@@ -57,6 +61,12 @@ public class FeedDisplay {
                 default -> System.out.println("Please select a valid entry 1-6.");
             }
         }
+    }
+
+    private void managerPerson() {
+
+        pmd.startTracking();
+
     }
 
     private void printMenu() {
@@ -79,9 +89,8 @@ public class FeedDisplay {
         while (!done) {
             try {
                 value = sc.nextInt();
-                sc.nextLine();
                 done = true;
-            } catch (Exception e) {
+            } catch (InputMismatchException e) {
                 sc.nextLine();
                 System.out.println("Please enter a number.");
             }
@@ -117,6 +126,7 @@ public class FeedDisplay {
 
                 System.out.print("Choose person");
                 int index = getInputForSelection() - 1;
+                sc.nextLine();
 
                 try {
                     selected = pl.getFollower(index);
@@ -152,6 +162,7 @@ public class FeedDisplay {
 
             System.out.print("Choose activity to display on map: ");
             int index = getInputForSelection() - 1;
+            sc.nextLine();
 
             try {
                 selected = pl.getMyActivity(person, index);
@@ -205,6 +216,7 @@ public class FeedDisplay {
                 }
 
                 int choice = getInputForSelection();
+                sc.nextLine();
 
                 try {
                     int index = choice - 1;
@@ -238,6 +250,7 @@ public class FeedDisplay {
                 }
 
                 int index = getInputForSelection() - 1;
+                sc.nextLine();
 
                 try {
                     Person toFollow = pl.getUnfollowedPerson(index);
@@ -251,6 +264,24 @@ public class FeedDisplay {
         }
     }
 
+    /*
+    Calls the logic to set person for dependency injection principle
+     */
+    public void setPersonLogic(Person person){
+
+        Preconditions.checkNotNull(person, "Person to be assigned should never be null");
+
+        pl.setPerson(person);
+    }
 
 
+    public void setPersonList(List<Person> people) {
+
+        Preconditions.checkNotNull(people, "Person's List to be assigned should never be null");
+        for(var x : people){
+            Preconditions.checkNotNull(x, "Person in a List to be assigned should never be null");
+        }
+
+        pl.setPeople(people);
+    }
 }

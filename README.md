@@ -424,8 +424,8 @@ classDiagram
         -double weight
 
         -list~Activity~activitiesDone
-        -list~Gear~gearsEquipped
-        -list~Person~following
+        -Set~Gear~gearsEquipped
+        -Set~Person~following
 
         -activities(LocalDateTime startDate, LocalDateTime endDate) List~Activity~
         +totalCalories(LocalDateTime startDate, LocalDateTime endDate) double
