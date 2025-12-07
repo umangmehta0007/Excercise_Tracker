@@ -64,7 +64,6 @@ public class Person implements Comparable<Person> {
         this.myActivityList = new ArrayList<>();
         this.gearsEquipped = new TreeSet<>();
 
-
         checkPerson(); //Post condition to check if a valid person has been made;
     }
 
@@ -112,17 +111,17 @@ public class Person implements Comparable<Person> {
 
     }
 
-    /**
-     * Removes this {@link Activity} from the {@link #myActivityList}
-     * @param index To be removed from the list.
-     */
-    public void removeActivity(int index){
-
-        Preconditions.checkState(index>=0, "Index should always be greater than equal to 0");
-        checkPerson();
-        myActivityList.remove(index);
-        checkPerson();
-    }
+//    /**
+//     * Removes this {@link Activity} from the {@link #myActivityList}
+//     * @param index To be removed from the list.
+//     */
+//    public void removeActivity(int index){
+//
+//        Preconditions.checkState(index>=0, "Index should always be greater than equal to 0");
+//        checkPerson();
+//        myActivityList.remove(index);
+//        checkPerson();
+//    }
 
     /**
      * Updates {@link #gearsEquipped} and adds {@link Gears}
@@ -164,54 +163,54 @@ public class Person implements Comparable<Person> {
         following.remove(person);
     }
 
-    private ArrayList<Activity> activities(final LocalDateTime startDate, final LocalDateTime endDate){
+//    private ArrayList<Activity> activities(final LocalDateTime startDate, final LocalDateTime endDate){
+//
+//        Preconditions.checkNotNull(startDate, "Dates can never be null");
+//        Preconditions.checkNotNull(endDate, "Dates can never be null");
+//
+//        ArrayList<Activity> activitiesInRange = new ArrayList<>();
+//
+//        for(Activity activity: myActivityList){
+//
+//            LocalDateTime activityDate = activity.getCalendar();
+//
+//            if(activityDate.isAfter(startDate) && activityDate.isBefore(endDate)){
+//                activitiesInRange.add(activity);
+//            }
+//
+//        }
+//        return activitiesInRange;
+//    }
 
-        Preconditions.checkNotNull(startDate, "Dates can never be null");
-        Preconditions.checkNotNull(endDate, "Dates can never be null");
-
-        ArrayList<Activity> activitiesInRange = new ArrayList<>();
-
-        for(Activity activity: myActivityList){
-
-            LocalDateTime activityDate = activity.getCalendar();
-
-            if(activityDate.isAfter(startDate) && activityDate.isBefore(endDate)){
-                activitiesInRange.add(activity);
-            }
-
-        }
-        return activitiesInRange;
-    }
-
-    public double totalCalories( final LocalDateTime startDate, final LocalDateTime endDate) {
-
-        Preconditions.checkNotNull(startDate, "Dates can never be null");
-        Preconditions.checkNotNull(endDate, "Dates can never be null");
-
-        ArrayList<Activity> myActivities = activities(startDate, endDate);
-
-        double totalCalories = 0;
-        for(Activity act: myActivities){
-            totalCalories+=act.caloriesBurnt(this);
-        }
-
-        return totalCalories;
-    }
-    public double totalDistance(final LocalDateTime startDate, final LocalDateTime endDate){
-
-
-        Preconditions.checkNotNull(startDate, "Dates can never be null");
-        Preconditions.checkNotNull(endDate, "Dates can never be null");
-
-        ArrayList<Activity> myActivities = activities(startDate, endDate);
-
-        double totalDistance = 0;
-        for(Activity act: myActivities){
-            totalDistance+=act.getDistance();
-        }
-
-        return totalDistance;
-    }
+//    public double totalCalories( final LocalDateTime startDate, final LocalDateTime endDate) {
+//
+//        Preconditions.checkNotNull(startDate, "Dates can never be null");
+//        Preconditions.checkNotNull(endDate, "Dates can never be null");
+//
+//        ArrayList<Activity> myActivities = activities(startDate, endDate);
+//
+//        double totalCalories = 0;
+//        for(Activity act: myActivities){
+//            totalCalories+=act.caloriesBurnt(this);
+//        }
+//
+//        return totalCalories;
+//    }
+//    public double totalDistance(final LocalDateTime startDate, final LocalDateTime endDate){
+//
+//
+//        Preconditions.checkNotNull(startDate, "Dates can never be null");
+//        Preconditions.checkNotNull(endDate, "Dates can never be null");
+//
+//        ArrayList<Activity> myActivities = activities(startDate, endDate);
+//
+//        double totalDistance = 0;
+//        for(Activity act: myActivities){
+//            totalDistance+=act.getDistance();
+//        }
+//
+//        return totalDistance;
+//    }
 
     public int compareTo(Person other) {
         Preconditions.checkNotNull(other, "Comaparable person should never be null");
@@ -242,11 +241,8 @@ public class Person implements Comparable<Person> {
         Preconditions.checkNotNull(o, "Person to check can never be null");
 
         Person other = (Person) o;
+
         return this.name.equals(other.name);
     }
-
-
-
-
 
 }

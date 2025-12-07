@@ -40,19 +40,19 @@ public class PersonLogic {
         checkPersonLogic();
     }
 
-    public void removeActivity(int index) throws InvalidActivitySelectionException {
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
-        checkPersonLogic();
-        List<Activity> acts = person.getMyActivityList();
-
-        if (index < 0 || index >= acts.size()) {
-            throw new InvalidActivitySelectionException();
-        }
-
-        person.removeActivity(index);
-
-        checkPersonLogic();
-    }
+//    public void removeActivity(int index) throws InvalidActivitySelectionException {
+//        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+//        checkPersonLogic();
+//        List<Activity> acts = person.getMyActivityList();
+//
+//        if (index < 0 || index >= acts.size()) {
+//            throw new InvalidActivitySelectionException();
+//        }
+//
+//        person.removeActivity(index);
+//
+//        checkPersonLogic();
+//    }
 
     public List<Activity> getActivities() {
         return Collections.unmodifiableList(person.getMyActivityList());

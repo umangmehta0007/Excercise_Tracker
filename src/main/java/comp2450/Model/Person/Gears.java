@@ -1,5 +1,6 @@
 package comp2450.Model.Person;
 
+import comp2450.Exceptions.InvalidUsageException;
 import comp2450.Model.Activity.Activity;
 import com.google.common.base.Preconditions;
 import comp2450.Exceptions.InvalidNameException;
@@ -48,12 +49,12 @@ public class Gears implements Comparable<Gears> {
 
             return this;
         }
-        public GearsBuilder usageBuilder(String uses) throws InvalidNameException {
+        public GearsBuilder usageBuilder(String uses) throws InvalidUsageException {
 
             Preconditions.checkNotNull(uses, "Usage should never be null");
 
             if(uses.isBlank()){
-                throw new InvalidNameException();
+                throw new InvalidUsageException();
             }
             this.uses = uses;
 

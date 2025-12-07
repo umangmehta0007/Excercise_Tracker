@@ -55,8 +55,8 @@ public class Main {
         * Doing this our route logic won't have null entries in here too.
          */
 
-        //Scanner sc = new Scanner(System.in);
-        Scanner sc = new Scanner(Path.of("activity.txt"));
+        Scanner sc = new Scanner(System.in);
+        //Scanner sc = new Scanner(Path.of("activity.txt"));
 
         Tracker tl = new Tracker(myManager);
 

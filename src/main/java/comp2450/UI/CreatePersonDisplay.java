@@ -44,6 +44,9 @@ public class CreatePersonDisplay {
             try {
                 builder.name(name);
             } catch (InvalidNameException e) {
+
+                System.out.println("Name should never be empty");
+                System.out.println(e.getClass().getSimpleName());
                 name = null;
             }
         } while (name == null);

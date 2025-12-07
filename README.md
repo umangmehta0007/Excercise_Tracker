@@ -19,6 +19,31 @@ your desk to enter all details about it.
 * The new thing about adding activity here would be you can now choose they you want to find the Route. 
 * Either you can enter manually, choose from your existing activites or enter starting and ending points for your route system will find a route for you from either of your existing one's or the follower's list. 
 
+
+## Why Franklin is a bad programmer
+
+* `BadStack1`
+    * My test cases said that the stack was always empty whether the stack should
+      have been empty or not (i.e., `isEmpty` always returned `true`).
+    * Error in pop/peek so far as it depends on if isEmpty and (both threw unexpected exceptions) in our state. 
+    * We're not able to conclude anything for push as we don't have any sufficient evidence
+      as our pop/peek are broken too so it may work fine or may be broken, I have to look at test code manually.
+    * size works fine in all test cases. 
+
+* `BadStack2`
+  * All other methods seemed to work correctly based on the tests I had.. 
+  * pop() is incorrect as I can see it's not removing the element it has popped due to which size, peek, empty were failed.
+
+* `BadStack3`
+  * size is of course wrong, because all other work in push.It never reported the correct number of elements once anything was pushed in the stack.
+  * All other methods appeared to work correctly based on the results of the tests I ran.
+* `BadStack4`
+  * Seems like peek is removing after peeking, instead of not making any changes to the state of stack.
+  * All other methods appeared to work correctly based on the results of the tests I ran.
+
+* `BadStack5`
+  * All test were successfully passed, indicating no error. 
+
 # Flows of interaction
 
 ## Diagrams

@@ -14,6 +14,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>COMP 2450 repository</id>
+            <url>https://home.cs.umanitoba.ca/~fbristow/2450-dependencies/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <dependency>
@@ -25,6 +32,12 @@
             <groupId>com.github.lalyos</groupId>
             <artifactId>jfiglet</artifactId>
             <version>0.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ca.umanitoba.cs.comp2450</groupId>
+            <artifactId>stack</artifactId>
+            <version>fall-2025.1</version>
         </dependency>
 
 

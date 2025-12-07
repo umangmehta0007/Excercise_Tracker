@@ -3,6 +3,7 @@ package comp2450.UI;
 import com.github.lalyos.jfiglet.FigletFont;
 import com.google.common.base.Preconditions;
 import comp2450.Exceptions.InvalidNameException;
+import comp2450.Exceptions.InvalidUsageException;
 import comp2450.Model.Person.Gears;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class CreateGearDisplay {
                 uses = sc.nextLine();
                 builder.usageBuilder(uses);
 
-            } catch (InvalidNameException e) {
+            } catch (InvalidUsageException e) {
                 System.out.println("Usages should never be empty");
                 uses = null;
             }

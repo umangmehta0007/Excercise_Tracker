@@ -45,8 +45,8 @@ public class ShowMap {
         MapLegend.printLegend(EMPTY, ROUTE, OBS);
         MapLegend.printGrid(MY_GRID_ACTIVITIES, EMPTY, ROUTE, OBS);
 
-        System.out.println("The Total distance travelled was "+ person.totalDistance(startingDate, endingDate )+ "KM.");
-        System.out.println("The Total Calories burnt were  "+ person.totalCalories(startingDate, endingDate )+ " kcal.");
+//        System.out.println("The Total distance travelled was "+ person.totalDistance(startingDate, endingDate )+ "KM.");
+//        System.out.println("The Total Calories burnt were  "+ person.totalCalories(startingDate, endingDate )+ " kcal.");
 
     }
 
