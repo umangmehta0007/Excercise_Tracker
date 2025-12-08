@@ -64,7 +64,8 @@ public class CreateRouteExistingDisplay {
             try {
                 result = sc.nextInt();
             }catch(InputMismatchException e) {
-                System.out.println("Selected move must be a positive whole number, e.g., 5");
+                sc.nextLine();
+                System.out.println("Selected move must be a positive whole number, e.g.,1,2,3");
                 result = -1;
             }
         }
