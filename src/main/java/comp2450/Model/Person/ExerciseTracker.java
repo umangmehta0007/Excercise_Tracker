@@ -39,8 +39,4 @@ public class ExerciseTracker {
         return this.myList;
     }
 
-    public void remove(int index) {
-        Preconditions.checkState(index >= 0, "Index should always be greater than equal to 0");
-        myList.remove(index);
-    }
 }

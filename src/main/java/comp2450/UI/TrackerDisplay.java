@@ -2,11 +2,9 @@ package comp2450.UI;
 
 import com.google.common.base.Preconditions;
 import comp2450.Exceptions.Exceptions.InvalidSelectionException;
-import comp2450.Logic.MapLogic;
-import comp2450.Logic.PersonLogic;
+
 import comp2450.Logic.Tracker;
-import comp2450.Model.Person.ExerciseTracker;
-import comp2450.Model.Map.Map;
+
 import comp2450.Model.Person.Person;
 
 import java.util.InputMismatchException;

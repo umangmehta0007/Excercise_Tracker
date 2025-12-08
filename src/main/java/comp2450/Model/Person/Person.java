@@ -7,7 +7,6 @@ import com.google.common.base.Preconditions;
 import comp2450.Exceptions.InvalidWeightException;
 import comp2450.Exceptions.InvalidNameException;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -183,9 +182,6 @@ public class Person implements Comparable<Person> {
     public Set<Person> getFollowing() {
         return this.following;
     }
-
-
-    //This was not my implementation checked online for these equals:will mention in mermaid diag.
     @Override
     public boolean equals(Object o) {
         Preconditions.checkNotNull(o, "Person to check can never be null");
