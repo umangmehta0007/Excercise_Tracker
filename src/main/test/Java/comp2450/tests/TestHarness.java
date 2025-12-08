@@ -5,6 +5,7 @@ import comp2450.Model.*;
 import comp2450.logic.TestMapLogic;
 import comp2450.logic.TestPersonLogic;
 import comp2450.logic.TestRouteLogic;
+import comp2450.logic.TestTracker;
 
 import java.io.IOException;
 
@@ -27,14 +28,20 @@ public class TestHarness {
         TestResults mapLogicResults = new TestMapLogic().runTests();
         TestResults personLogicResults = new TestPersonLogic().runTests();
         TestResults routeLogicResults = new TestRouteLogic().runTests();
+        TestResults trackerLogicResults = new TestTracker().runTests();
+
 
 
 //        successes += personLogicResults.successes()+mapLogicResults.successes()+routeLogicResults.successes();
 //        failures += personLogicResults.failures()+mapLogicResults.failures()+routeLogicResults.failures();
 
 
-        successes += stackResults.successes() + gearResults.successes() + personResults.successes() + activityResults.successes() + coordinatesResults.successes() + obstacleResults.successes()+personLogicResults.successes()+mapLogicResults.successes()+routeLogicResults.successes();
-        failures += stackResults.failures() + gearResults.failures() + personResults.failures() + activityResults.failures() + coordinatesResults.failures() + obstacleResults.failures()+personLogicResults.failures()+mapLogicResults.failures()+routeLogicResults.failures();;
+        successes += stackResults.successes() +trackerLogicResults.failures()+ gearResults.successes() + personResults.successes() + activityResults.successes() + coordinatesResults.successes() + obstacleResults.successes()+personLogicResults.successes()+mapLogicResults.successes()+routeLogicResults.successes();
+        failures += stackResults.failures() + gearResults.failures() +
+                personResults.failures() + activityResults.failures() +
+                coordinatesResults.failures() + obstacleResults.failures()+
+                personLogicResults.failures()+mapLogicResults.failures()+
+                routeLogicResults.failures()+trackerLogicResults.failures();
 
         System.out.printf("Total tests: %d\n", successes + failures);
         System.out.printf("\tSuccesses: %d\n", successes);
