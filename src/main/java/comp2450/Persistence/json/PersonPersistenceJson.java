@@ -162,16 +162,6 @@ public class PersonPersistenceJson implements PersonPersistence {
         return followerBuilder.build();
     }
 
-//    private Gears gearsFromJson(JsonObject gearsJson) throws InvalidNameException, InvalidUsageException {
-//
-//        Gears.GearsBuilder gearBuilder = new Gears.GearsBuilder();
-//
-//        Gears gear = gearBuilder.nameBuilder(gearsJson.getString("name"))
-//                .usageBuilder(gearsJson.getString("usage")).build();
-//
-//        return gear;
-//    }
-
     private List<Coordinates> routeFromJson(JsonArray routeJson) throws InvalidCoordinatesException {
 
         Preconditions.checkNotNull(routeJson, "Array of routes should never be null");
@@ -194,7 +184,6 @@ public class PersonPersistenceJson implements PersonPersistence {
 
         return route;
     }
-
 
     public Map<String, Person> loadPerson() {
 
