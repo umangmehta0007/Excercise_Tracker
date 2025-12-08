@@ -51,6 +51,9 @@ public class CreateActivityDisplay {
                 builder.createName(getName);
             } catch (InvalidNameException e) {
                 getName = null;
+
+                System.out.println("Empty name entered: Please enter a valid name ");
+
             }
         } while (getName == null);
     }
@@ -123,7 +126,9 @@ public class CreateActivityDisplay {
                 sc.nextLine();
 
             } catch (InputMismatchException ime) {
+                sc.nextLine();
                 System.out.println("Please enter a valid NUMBER (e.g 3.2)");
+                sc.nextLine();
                 coverage = -1.0;
             }
             catch (InvalidDistanceException ide) {

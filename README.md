@@ -367,7 +367,7 @@ Some notable components include:
 This project was developed using IntelliJ IDEA and uses Maven, so there are two
 ways to run it:
 
-1. Open the class called `Main.java` and click the green play button on the
+1. Open the class called `Main` and click the green play button on the
    `main`method, or
 2. Run Maven on the command line:
    
@@ -600,19 +600,20 @@ classDiagram
     }
 
 
-    note for Gears "Exercise Tracker
-         <ul>
-         <li>myList != null</li>
-         <li>loop: no People inside list are null</li>
-        </ul>
-        "
-    class ExerciseTracker{
-        -List~Person~myList
-        
+    note for ExerciseTracker "Invariant Properties
+<ul>
+<li>myList != null</li>
+<li>loop: no People inside list are null</li>
+</ul>
+"
+    class ExerciseTracker {
+        -List~Person~ myList
         +add(Person person) void
         +getList() List~Person~
         +remove(index) void
     }
+
+
 
     class Stack~T~ {
         <<Interface>>
@@ -622,16 +623,20 @@ classDiagram
         +isEmpty() boolean
     }
 
+    note for LinkedListStack "Invariant Properties
+    <ul>
+    <li> size >=0
+    <li> ((size == 0 && top == null) || (size > 0 && top!= null))
+    <ul>
+    "
     class LinkedListStack~T~ {
         -Node~T~ top
         -int size
-        
         +push(T item) void
         +pop() T
         +size() int
         +isEmpty() boolean
     }
-
     class Node~T~ {
         -T data
         -Node~T~ next

@@ -45,6 +45,7 @@ public class CreatePersonDisplay {
                 builder.name(name);
             } catch (InvalidNameException e) {
                 name = null;
+                System.out.println("Empty name entered: Please enter a valid name ");
             }
         } while (name == null);
     }
