@@ -28,7 +28,10 @@ public class PersonLogic {
         for (var x : earthPeople) {
             Preconditions.checkNotNull(x, "people in the list cannot be null");
         }
+        Preconditions.checkNotNull(persistence, "Persistence cannot be here null");
+
     }
+
 
     public PersonLogic(PersonPersistence persistence) {
         this.persistence = persistence;

@@ -23,13 +23,12 @@ public class Tracker {
 
     public void checkTracker() {
         Preconditions.checkNotNull(tracker, "Tracker cannot be here null");
+        Preconditions.checkNotNull(persistence, "Persistence cannot be here null");
     }
 
     public void addPerson(Person p) {
         checkTracker();
         tracker.add(p);
-
-        //Todo after adding a new person to my file I want to persist this.
 
         persistence.savePerson(p);
 

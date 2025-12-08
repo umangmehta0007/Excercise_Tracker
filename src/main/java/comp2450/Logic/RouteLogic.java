@@ -155,6 +155,9 @@ public class RouteLogic {
             current = myStack.pop();
             
         }
+
+        visited.add(end);
+
         checkRouteLogic();
 
         return visited;

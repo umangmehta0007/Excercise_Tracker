@@ -20,20 +20,20 @@ import java.util.List;
 
 public class MapLogic {
 
-  final private Map map;
-  final private Dimensions dim;
+    final private Map map;
+    final private Dimensions dim;
 
     public MapLogic(Map map) {
         this.map = map;
         this.dim = map.getDimensions();
     }
 
-    public void checkMapLogic(){
+    public void checkMapLogic() {
         Preconditions.checkNotNull(map, "Map can never be null");
         Preconditions.checkNotNull(dim, "Dimensions can never be null");
     }
 
-    public Map getMap(){
+    public Map getMap() {
         return this.map;
     }
 
@@ -45,17 +45,17 @@ public class MapLogic {
         notObstacle(cod);
         checkMapLogic();
     }
+
     public void checkValidObsCod(Coordinates cod) throws CoordinatesOutOfBoundsException, RouteAlreadyExistsException, ObstacleAlreadyExistsException {
 
         checkMapLogic();
         checkWithinBound(cod);
-        //notRoute(cod);
         notObstacle(cod);
         checkMapLogic();
 
     }
 
-    public Dimensions getDimensions(){
+    public Dimensions getDimensions() {
 
         return this.dim;
     }
@@ -66,11 +66,11 @@ public class MapLogic {
 
     public void removeObstacle(int index) throws InvalidSelectionException {
 
-        Preconditions.checkState(index>=0, "index should alwyas eb greater than = 0");
+        Preconditions.checkState(index >= 0, "index should alwyas eb greater than = 0");
 
         checkMapLogic();
 
-        if(index<0 || index>map.getObsInMap().size()){
+        if (index < 0 || index > map.getObsInMap().size()) {
             throw new InvalidSelectionException();
         }
 
@@ -81,7 +81,7 @@ public class MapLogic {
 
     }
 
-    public List<Obstacle> getAllObstacle(){
+    public List<Obstacle> getAllObstacle() {
 
         return map.getObsInMap();
     }
@@ -89,7 +89,7 @@ public class MapLogic {
     public void createGrid(List<Activity> routes) throws InvalidCoordinatesException {
 
         Preconditions.checkNotNull(routes, "Activity to be check should never be null");
-        for(var r: routes){
+        for (var r : routes) {
             Preconditions.checkNotNull(r, "Activity in list to be check should never be null");
         }
 
@@ -108,7 +108,7 @@ public class MapLogic {
     private void addObstacleToGrid(List<Obstacle> obstacles) {
 
         Preconditions.checkNotNull(obstacles, "Obstacles to be check should never be null");
-        for(var r: obstacles){
+        for (var r : obstacles) {
             Preconditions.checkNotNull(r, "Obstacles in list to be check should never be null");
         }
         checkMapLogic();
@@ -145,7 +145,7 @@ public class MapLogic {
     private void addRouteToGrid(List<Activity> activities) {
 
         Preconditions.checkNotNull(activities, "Activity to be check should never be null");
-        for(var r: activities){
+        for (var r : activities) {
             Preconditions.checkNotNull(r, "Activity in list to be check should never be null");
         }
 
@@ -188,7 +188,7 @@ public class MapLogic {
 
         int y = cod.yCoordinates();
 
-        if(x>=(dim.nRows()) || y>=(dim.nCols())){
+        if (x >= (dim.nRows()) || y >= (dim.nCols())) {
             throw new CoordinatesOutOfBoundsException();
         }
         checkMapLogic();
@@ -201,9 +201,8 @@ public class MapLogic {
 
         checkMapLogic();
 
-
-        //resetting grid everytime to add updated obstacles
         List<Obstacle> list = map.getObsInMap();
+
         for (var obs : list) {
             List<Coordinates> coords = obs.getMappingObject();
             for (Coordinates c : coords) {
@@ -236,18 +235,5 @@ public class MapLogic {
         checkMapLogic();
 
     }
-//    private void notRoute(Coordinates cod) throws RouteAlreadyExistsException {
-//
-//        for (Activity act : personActivitiesOrGlobalList) {
-//            for (Coordinates c : act.getMappingObject()) {
-//                if (c.equals(cod)) {
-//                    throw new RouteAlreadyExistsException();
-//                }
-//            }
-//        }
-//    }
-
-
-    //if my map doesn't hold activites now It will hold al activitties of all persons as whole,
-        //now I'll have
 }
+
