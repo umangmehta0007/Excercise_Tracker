@@ -52,6 +52,8 @@ public class CreateActivityDisplay {
             try {
                 builder.createName(getName);
             } catch (InvalidNameException e) {
+
+                System.out.println("Name should never be empty");
                 getName = null;
             }
         } while (getName == null);

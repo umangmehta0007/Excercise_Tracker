@@ -104,8 +104,6 @@ public class TestMapLogic {
             e.printStackTrace();
         }
     }
-
-
     private void testNotObstacle() {
 
         try {
@@ -170,8 +168,6 @@ public class TestMapLogic {
             e.printStackTrace();
         }
     }
-
-
     private void testAddObstacle() {
 
         try {
@@ -209,7 +205,6 @@ public class TestMapLogic {
             e.printStackTrace();
         }
     }
-
     private void testRemoveObstacle() {
         try {
             Dimensions dim = new Dimensions(10, 10);
@@ -265,7 +260,6 @@ public class TestMapLogic {
             e.printStackTrace();
         }
     }
-
     private void testResetGrid() {
         try {
             Dimensions dim = new Dimensions(10, 10);
@@ -303,7 +297,6 @@ public class TestMapLogic {
             e.printStackTrace();
         }
     }
-
     private void testCreateGrid() {
         try {
 
@@ -362,7 +355,6 @@ public class TestMapLogic {
         successes++;
         green("PASS: " + message);
     }
-
     private void fail(String message) {
         failures++;
         red("FAIL: " + message);

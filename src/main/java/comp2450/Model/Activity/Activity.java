@@ -175,18 +175,6 @@ public class Activity implements IMapDataType {
         return this.distance;
     }
 
-    /**
-     * Calculates and returns the total calories burnt during this activity.
-     * Using {@link #distance} , {@link #CALORIES_CONSTANT }
-     */
-
-//    public double caloriesBurnt(Person p) {
-//
-//        Preconditions.checkNotNull(p, "Person can never be null");
-//        double burnt = CALORIES_CONSTANT * p.getWeight() * distance;
-//        checkActivity();
-//        return burnt;
-//    }
     @Override
     public List<Coordinates> getMappingObject() {
         return Collections.unmodifiableList(routeTaken);

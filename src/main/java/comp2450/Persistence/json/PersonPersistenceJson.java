@@ -19,8 +19,6 @@ import java.util.*;
 public class PersonPersistenceJson implements PersonPersistence {
 
     private final Path personStorage;
-
-
     private void checkPersonPersistenceJson() {
         Preconditions.checkNotNull(personStorage);
     }
@@ -35,7 +33,7 @@ public class PersonPersistenceJson implements PersonPersistence {
     @Override
     public Person savePerson(Person person) {
 
-        Preconditions.checkNotNull(person, "");
+        Preconditions.checkNotNull(person, "Person should never be null");
         checkPersonPersistenceJson();
 
         Map<String, Person> allPerson = loadPerson();
@@ -243,6 +241,9 @@ public class PersonPersistenceJson implements PersonPersistence {
                      InvalidDistanceException | InvalidCoordinatesException | InvalidRouteException |
                      RoutesNotAdjacentException e) {
                 throw new RuntimeException(e);
+            }catch (JsonException e) {
+                // this means the file is almost certainly empty, so
+                // we're going to swallow this exception.
             }
         }
 

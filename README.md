@@ -50,6 +50,10 @@ your desk to enter all details about it.
       individual that was changed, you remove everything and update it.
     * In our case we removed the whole list of people in the tracker and added a new one.
 
+# Testing a Stack
+
+Please look at my test data for the stack in the file named
+`stack-test-data.xlsx`
 
 ## You can run Test harness that was written using this green button on the left or click play button when you open `TestHarness` file. 
 
@@ -583,7 +587,7 @@ Method Preconditions
         -int nCols
     }
 
-    note for Gears "Exercise Tracker
+    note for ExerciseTracker "Invariant Properties
 <ul>
 <li>myList != null</li>
 <li>loop: no People inside list are null</li>
@@ -596,6 +600,8 @@ Method Preconditions
         +remove(index) void
     }
 
+
+    
     class Stack~T~ {
         <<Interface>>
         +push(T item) void
@@ -604,6 +610,12 @@ Method Preconditions
         +isEmpty() boolean
     }
 
+    note for LinkedListStack "Invariant Properties
+    <ul>
+    <li> size >=0
+    <li> ((size == 0 && top == null) || (size > 0 && top!= null))
+    <ul>
+    "
     class LinkedListStack~T~ {
         -Node~T~ top
         -int size

@@ -39,80 +39,16 @@ public class TestPersonLogic {
 
 
 
-//    private void testAddActivity() {
-//
-//        try {
-//            Path temp = Files.createTempFile("Activity", "Json");
-//            PersonPersistenceJson persistence = new PersonPersistenceJson(temp);
-//
-//            PersonLogic pl = new PersonLogic(persistence);
-//
-//            Person.PersonBuilder pb = new Person.PersonBuilder();
-//            Gears.GearsBuilder gb  =new Gears.GearsBuilder();
-//            Coordinates.CoordinateBuilder cb = new Coordinates.CoordinateBuilder();
-//
-//            Person person = pb.name("Umang").weight(85).build();
-//
-//            pl.setPerson(person);
-//            pl.setPeople(List.of(person));
-//
-//            Gears gear = gb.nameBuilder("Shoes").usageBuilder("Run").build();
-//            Coordinates c = cb.xCoordinates(0).yCoordinates(0).build();
-//
-//            List<Coordinates> route = List.of(c);
-//
-//            Activity act = new Activity.ActivityBuilder()
-//                    .createName("Running")
-//                    .gears(gear)
-//                    .calendar(LocalDateTime.now())
-//                    .route(route)
-//                    .distance(10)
-//                    .build();
-//
-//            int before = person.getMyActivityList().size();
-//
-//            pl.addActivity(act);
-//
-//            int after = person.getMyActivityList().size();
-//
-//            if (after != before + 1) {
-//                fail("Activity was not added");
-//            } else if (!person.getMyActivityList().contains(act)) {
-//                fail("No newly added activity was added");
-//            }
-//
-//            pass("Success in adding activity.");
-//
-//        } catch (Exception e) {
-//            fail("FAIL: Unexpected exception thrown: ");
-//            e.printStackTrace();
-//        }
-//
-  /*
-  I did use the other one, that was demonstrated in class, but it was throwing some blunder Exceptions so just copy pasted what professor did
-  Using the mock persistence.
-   */
     private void testAddActivity() {
 
         try {
+            Path temp = Files.createTempFile("Activity", "Json");
+            PersonPersistenceJson persistence = new PersonPersistenceJson(temp);
 
-            PersonPersistence mockPersistence = new PersonPersistence(){
-                @Override
-                public Person savePerson(Person p) {
-                    return null;
-                }
-
-                @Override
-                public Collection<Person> loadList() throws NotFoundException {
-                    return null;
-                }
-
-            };
-
-            PersonLogic pl = new PersonLogic(mockPersistence);
+            PersonLogic pl = new PersonLogic(persistence);
 
             Person.PersonBuilder pb = new Person.PersonBuilder();
-            Gears.GearsBuilder gb  = new Gears.GearsBuilder();
+            Gears.GearsBuilder gb = new Gears.GearsBuilder();
             Coordinates.CoordinateBuilder cb = new Coordinates.CoordinateBuilder();
 
             Person person = pb.name("Umang").weight(85).build();
@@ -121,7 +57,6 @@ public class TestPersonLogic {
             pl.setPeople(List.of(person));
 
             Gears gear = gb.nameBuilder("Shoes").usageBuilder("Run").build();
-
             Coordinates c = cb.xCoordinates(0).yCoordinates(0).build();
 
             List<Coordinates> route = List.of(c);
@@ -141,18 +76,83 @@ public class TestPersonLogic {
             int after = person.getMyActivityList().size();
 
             if (after != before + 1) {
-                fail("FAIL: Activity was not added");
+                fail("Activity was not added");
             } else if (!person.getMyActivityList().contains(act)) {
-                fail("FAIL: Activity missing after add");
-            } else {
-                pass("PASS: Activity added successfully");
+                fail("No newly added activity was added");
             }
 
+            pass("Success in adding activity.");
+
         } catch (Exception e) {
-            fail("FAIL: Unexpected exception thrown:");
+            fail("FAIL: Unexpected exception thrown: ");
             e.printStackTrace();
         }
     }
+  /*
+  I did use the other one, that was demonstrated in class, but it was throwing some blunder Exceptions so just copy pasted what professor did
+  Using the mock persistence.
+   */
+//    private void testAddActivity() {
+//
+//        try {
+//
+//            PersonPersistence mockPersistence = new PersonPersistence(){
+//                @Override
+//                public Person savePerson(Person p) {
+//                    return null;
+//                }
+//
+//                @Override
+//                public Collection<Person> loadList() throws NotFoundException {
+//                    return null;
+//                }
+//
+//            };
+//
+//            PersonLogic pl = new PersonLogic(mockPersistence);
+//
+//            Person.PersonBuilder pb = new Person.PersonBuilder();
+//            Gears.GearsBuilder gb  = new Gears.GearsBuilder();
+//            Coordinates.CoordinateBuilder cb = new Coordinates.CoordinateBuilder();
+//
+//            Person person = pb.name("Umang").weight(85).build();
+//
+//            pl.setPerson(person);
+//            pl.setPeople(List.of(person));
+//
+//            Gears gear = gb.nameBuilder("Shoes").usageBuilder("Run").build();
+//
+//            Coordinates c = cb.xCoordinates(0).yCoordinates(0).build();
+//
+//            List<Coordinates> route = List.of(c);
+//
+//            Activity act = new Activity.ActivityBuilder()
+//                    .createName("Running")
+//                    .gears(gear)
+//                    .calendar(LocalDateTime.now())
+//                    .route(route)
+//                    .distance(10)
+//                    .build();
+//
+//            int before = person.getMyActivityList().size();
+//
+//            pl.addActivity(act);
+//
+//            int after = person.getMyActivityList().size();
+//
+//            if (after != before + 1) {
+//                fail("FAIL: Activity was not added");
+//            } else if (!person.getMyActivityList().contains(act)) {
+//                fail("FAIL: Activity missing after add");
+//            } else {
+//                pass("PASS: Activity added successfully");
+//            }
+//
+//        } catch (Exception e) {
+//            fail("FAIL: Unexpected exception thrown:");
+//            e.printStackTrace();
+//        }
+//    }
     private void testAddGear() {
 
         try {

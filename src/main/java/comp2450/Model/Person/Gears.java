@@ -11,8 +11,6 @@ import comp2450.Exceptions.InvalidNameException;
  */
 public class Gears implements Comparable<Gears> {
 
-//    private static final TreeSet<Gears> allGears = new TreeSet<>();
-
     final private String name;
     final private String uses;
 

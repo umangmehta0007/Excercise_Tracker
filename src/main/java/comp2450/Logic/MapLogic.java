@@ -66,7 +66,7 @@ public class MapLogic {
 
     public void removeObstacle(int index) throws InvalidSelectionException {
 
-        Preconditions.checkState(index >= 0, "index should alwyas eb greater than = 0");
+        Preconditions.checkState(index >= 0, "index should always be greater than = 0");
 
         checkMapLogic();
 

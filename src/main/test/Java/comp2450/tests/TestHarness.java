@@ -36,7 +36,10 @@ public class TestHarness {
 //        failures += personLogicResults.failures()+mapLogicResults.failures()+routeLogicResults.failures();
 
 
-        successes += stackResults.successes() +trackerLogicResults.failures()+ gearResults.successes() + personResults.successes() + activityResults.successes() + coordinatesResults.successes() + obstacleResults.successes()+personLogicResults.successes()+mapLogicResults.successes()+routeLogicResults.successes();
+        successes += stackResults.successes() +trackerLogicResults.failures()+
+                gearResults.successes() + personResults.successes() + activityResults.successes() +
+                coordinatesResults.successes() + obstacleResults.successes()+personLogicResults.successes()+
+                mapLogicResults.successes()+routeLogicResults.successes();
         failures += stackResults.failures() + gearResults.failures() +
                 personResults.failures() + activityResults.failures() +
                 coordinatesResults.failures() + obstacleResults.failures()+
