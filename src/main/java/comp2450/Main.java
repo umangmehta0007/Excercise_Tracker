@@ -9,65 +9,57 @@ import comp2450.Logic.Tracker;
 import comp2450.Model.Person.ExerciseTracker;
 import comp2450.Model.Map.Dimensions;
 import comp2450.Model.Map.Map;
+import comp2450.Model.Person.Person;
+import comp2450.Persistence.NotFoundException;
+import comp2450.Persistence.PersonPersistence;
+import comp2450.Persistence.json.PersonPersistenceJson;
 import comp2450.UI.FeedDisplay;
 import comp2450.UI.PersonManagementDisplay;
 import comp2450.UI.TrackerDisplay;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
 
-    /*
-    As per the dependency inversion, we did is using the technique known as dependency Injection.
+    public static void main(String[] args) throws IOException {
 
-    We injected the UI/Logic that we initially were giving power to know what's it doing.
-    UI should only care how to even construct instance of dependency and shouldn't have responsibility to construct.
-    Because that will tell how it works internally.
-
-    Using injection, we'll do it. At least we're going to use interface type in java.
-    We're going to change classes to accept instance of other classes
-    Accept instance of dependencies.
-
-    Main class constructs and passes the dependencies.
-
-    UI should only care what it can do.
-     */
-    public static void main(String[]args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        PersonPersistence persistence = new PersonPersistenceJson(Path.of("person.json"));
 
         ExerciseTracker myManager = new ExerciseTracker();
 
+        try {
+            Collection<Person> p = persistence.loadList();
+            myManager.setList(new ArrayList<Person>(p));
+        } catch (NotFoundException e) {
+
+        }
         Map map = null;
-        /*
-        I was trying to do somehting like createMap(map, ml) and inside that update ml as ml = new Maplogic(Map)
-        Which was highly incorrect as I was creating a local insitance and was going out of scope as my that ended.
-         */
+
+
+        //All of my logic layers should be able to do persistence now
+
+
+        //Persistence of all/any profiles created
         MapLogic ml = createMap(map);
-        PersonLogic pl = new PersonLogic();
+        PersonLogic pl = new PersonLogic(persistence);
         RouteLogic rl = new RouteLogic(pl, ml);
+        Tracker tl = new Tracker(myManager, persistence);
 
-
-        /*
-        *Initially Person logic had two arguments, which we won't know unless we run the program
-        * So now instead we removed all parameters and made setter for those which our pl logic layer will call
-        * Doing this our route logic won't have null entries in here too.
-         */
-
-        Scanner sc = new Scanner(System.in);
-        //Scanner sc = new Scanner(Path.of("activity.txt"));
-
-        Tracker tl = new Tracker(myManager);
-
-        PersonManagementDisplay personDisplay= new PersonManagementDisplay(sc, pl, ml, rl);
-        FeedDisplay feed = new FeedDisplay(sc,pl, ml, personDisplay);
-        TrackerDisplay display = new TrackerDisplay(sc, tl, feed );
+        PersonManagementDisplay personDisplay = new PersonManagementDisplay(sc, pl, ml, rl);
+        FeedDisplay feed = new FeedDisplay(sc, pl, ml, personDisplay);
+        TrackerDisplay display = new TrackerDisplay(sc, tl, feed);
 
         display.startRecording();
     }
 
-    public static MapLogic  createMap(Map map){
+    public static MapLogic createMap(Map map) {
 
         try {
             Dimensions dim = new Dimensions(10, 10);

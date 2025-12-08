@@ -8,6 +8,7 @@ import comp2450.Exceptions.Exceptions.InvalidSelectionException;
 import comp2450.Model.Activity.Activity;
 import comp2450.Model.Person.Gears;
 import comp2450.Model.Person.Person;
+import comp2450.Persistence.PersonPersistence;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,16 +19,19 @@ public class PersonLogic {
     private Person person;
     private List<Person> earthPeople;
 
+    private final PersonPersistence persistence;
+
 
     private void checkPersonLogic() {
         Preconditions.checkNotNull(person, "Person cannot be null");
         Preconditions.checkNotNull(earthPeople, "All people cannot be null");
-        for(var x: earthPeople){
+        for (var x : earthPeople) {
             Preconditions.checkNotNull(x, "people in the list cannot be null");
         }
     }
 
-    public PersonLogic() {
+    public PersonLogic(PersonPersistence persistence) {
+        this.persistence = persistence;
     }
 
 
@@ -37,22 +41,10 @@ public class PersonLogic {
 
         person.addActivity(act);
 
+        persistence.savePerson(this.person);
+
         checkPersonLogic();
     }
-
-//    public void removeActivity(int index) throws InvalidActivitySelectionException {
-//        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
-//        checkPersonLogic();
-//        List<Activity> acts = person.getMyActivityList();
-//
-//        if (index < 0 || index >= acts.size()) {
-//            throw new InvalidActivitySelectionException();
-//        }
-//
-//        person.removeActivity(index);
-//
-//        checkPersonLogic();
-//    }
 
     public List<Activity> getActivities() {
         return Collections.unmodifiableList(person.getMyActivityList());
@@ -65,11 +57,13 @@ public class PersonLogic {
 
         person.addGear(gear);
 
+        persistence.savePerson(this.person);
+
         checkPersonLogic();
     }
 
     public void removeGear(int index) throws InvalidGearSelectionException {
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+        Preconditions.checkState(index >= 0, "Index should alwayas be >=0");
 
         checkPersonLogic();
 
@@ -90,7 +84,7 @@ public class PersonLogic {
     }
 
     public Gears getGear(int index) throws InvalidSelectionException {
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+        Preconditions.checkState(index >= 0, "Index should alwayas be >=0");
 
         List<Gears> list = this.gears();
         if (index < 0 || index >= list.size()) {
@@ -107,12 +101,15 @@ public class PersonLogic {
 
         person.addFollower(follower);
 
+        //TODO after adding a follower we have to persist my person
+        persistence.savePerson(this.person);
+
         checkPersonLogic();
     }
 
     public void removeFollower(int index) throws InvalidFollowerSelectionException {
 
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+        Preconditions.checkState(index >= 0, "Index should alwayas be >=0");
 
         checkPersonLogic();
 
@@ -124,6 +121,9 @@ public class PersonLogic {
 
         Person target = list.get(index);
         person.removeFollower(target);
+
+        //TODO after removing an follower we have to persist my person
+        persistence.savePerson(this.person);
 
         checkPersonLogic();
     }
@@ -140,12 +140,12 @@ public class PersonLogic {
 
 
         Preconditions.checkNotNull(person, "Person cannot be null");
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+        Preconditions.checkState(index >= 0, "Index should alwayas be >=0");
 
         checkPersonLogic();
 
 
-        if(index<0 ||index >=person.getMyActivityList().size()){
+        if (index < 0 || index >= person.getMyActivityList().size()) {
             throw new InvalidActivitySelectionException();
         }
 
@@ -159,7 +159,7 @@ public class PersonLogic {
 
     public Person getFollower(int index) throws InvalidSelectionException {
 
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+        Preconditions.checkState(index >= 0, "Index should alwayas be >=0");
 
         checkPersonLogic();
 
@@ -173,7 +173,7 @@ public class PersonLogic {
         return fol.get(index);
     }
 
-    public List<Activity> getFollowersActivity(Person person){
+    public List<Activity> getFollowersActivity(Person person) {
 
         Preconditions.checkNotNull(person, "Person cannot be null");
         checkPersonLogic();
@@ -181,7 +181,7 @@ public class PersonLogic {
         return person.getMyActivityList();
     }
 
-    public List<Person>getPeopleOnTracker(){
+    public List<Person> getPeopleOnTracker() {
 
         return this.earthPeople;
     }
@@ -201,9 +201,10 @@ public class PersonLogic {
 
         return result;
     }
+
     public Person getUnfollowedPerson(int index) throws InvalidSelectionException {
 
-        Preconditions.checkState(index>=0, "Index should alwayas be >=0");
+        Preconditions.checkState(index >= 0, "Index should alwayas be >=0");
 
         checkPersonLogic();
 
@@ -221,20 +222,19 @@ public class PersonLogic {
     Setter For dependency Injection
      */
 
-    public void setPerson(Person p){
+    public void setPerson(Person p) {
         Preconditions.checkNotNull(p, "Person can never be null");
         this.person = p;
     }
-    public void setPeople(List<Person> p){
+
+    public void setPeople(List<Person> p) {
         Preconditions.checkNotNull(p, "Person's List to be assigned should never be null");
-        for(var x : p){
+        for (var x : p) {
             Preconditions.checkNotNull(x, "Person in a List to be assigned should never be null");
         }
 
         this.earthPeople = p;
     }
-
-
 
 
 }
