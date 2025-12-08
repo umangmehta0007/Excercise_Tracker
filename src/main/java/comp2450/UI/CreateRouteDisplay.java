@@ -101,6 +101,8 @@ public class CreateRouteDisplay {
              result =sc.nextInt();
              sc.nextLine();
             }catch(InputMismatchException ime){
+
+                sc.nextLine();
                 System.out.println("Please select a valid whole number:1,2,3");
             }
         }

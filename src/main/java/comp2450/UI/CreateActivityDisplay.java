@@ -128,7 +128,6 @@ public class CreateActivityDisplay {
             } catch (InputMismatchException ime) {
                 sc.nextLine();
                 System.out.println("Please enter a valid NUMBER (e.g 3.2)");
-                sc.nextLine();
                 coverage = -1.0;
             }
             catch (InvalidDistanceException ide) {

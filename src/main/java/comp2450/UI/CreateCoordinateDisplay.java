@@ -50,9 +50,9 @@ public class CreateCoordinateDisplay {
                 builder.xCoordinates(x);
             }
             catch(InputMismatchException ime){
+                sc.nextLine();
                 System.out.println("Please enter the digits for X coordinate");
                 x = -1;
-                sc.nextLine();
             }
             catch(InvalidCoordinatesException ice){
                 System.out.println("Please enter the valid state for X coordinate(>=0)");
